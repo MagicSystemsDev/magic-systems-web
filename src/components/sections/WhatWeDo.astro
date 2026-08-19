@@ -1,0 +1,114 @@
+<section id="que-hacemos" class="what-we-do" aria-labelledby="what-title">
+  <div class="content-width">
+    <header class="section-heading">
+      <p>Qué hacemos</p><h2 id="what-title">Dos formas de construir valor.</h2>
+    </header><div class="models">
+      <article>
+        <p class="number">01</p><div>
+          <h3>Productos</h3><p>
+            Creamos software que puede evolucionar como producto Magic Systems.
+          </p>
+        </div>
+      </article><article>
+        <p class="number">02</p><div>
+          <h3>Soluciones para clientes</h3><p>
+            Construimos soluciones alrededor de necesidades específicas,
+            negocios e identidades.
+          </p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+<style>
+  .what-we-do {
+    padding: clamp(6rem, 13vw, 11rem) 0;
+    border-top: 1px solid var(--ms-color-border);
+    background: linear-gradient(
+      180deg,
+      var(--ms-color-background),
+      var(--ms-color-surface)
+    );
+    scroll-margin-top: 5rem;
+  }
+  .section-heading {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .section-heading > p {
+    margin: 0.5rem 0 0;
+    color: var(--ms-color-brand-primary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 15ch;
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(2.25rem, 5vw, 4.5rem);
+    font-weight: 500;
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+  .models {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin-top: clamp(4rem, 9vw, 8rem);
+    border-block: 1px solid var(--ms-color-border);
+  }
+  article {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    min-height: 19rem;
+    padding: clamp(2rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3.5rem)
+      clamp(2rem, 4vw, 3.5rem) 0;
+  }
+  article + article {
+    padding-left: clamp(1rem, 4vw, 3.5rem);
+    border-left: 1px solid var(--ms-color-border);
+  }
+  .number {
+    margin: 0.35rem 0 0;
+    color: var(--ms-color-system-cyan);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+  }
+  h3 {
+    max-width: 12ch;
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(1.65rem, 3vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+  }
+  h3 + p {
+    max-width: 27rem;
+    margin: 3rem 0 0;
+    color: var(--ms-color-text-muted);
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
+  }
+  @media (max-width: 43rem) {
+    .section-heading {
+      grid-template-columns: 1fr;
+    }
+    .models {
+      grid-template-columns: 1fr;
+    }
+    article {
+      min-height: 16rem;
+      padding-right: 0;
+    }
+    article + article {
+      padding-left: 0;
+      border-top: 1px solid var(--ms-color-border);
+      border-left: 0;
+    }
+  }
+</style>

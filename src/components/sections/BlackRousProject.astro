@@ -1,0 +1,147 @@
+---
+import type { Project } from "../../data/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="black-rous" aria-labelledby="black-rous-title">
+  <div class="black-rous-inner content-width">
+    <div class="black-rous-copy">
+      <div class="project-meta">
+        <p>Solución para cliente</p>
+        <p class="status"><span aria-hidden="true"></span> En desarrollo</p>
+      </div>
+      <h3 id="black-rous-title">Black Rous</h3>
+      <p class="summary">{project.summary}</p>
+      <p class="role">
+        Identidad del cliente. Solución construida con intención.
+      </p>
+    </div>
+    <figure>
+      <img
+        src="/projects/black-rous/black-rous.png"
+        alt=""
+        width="1536"
+        height="1024"
+        loading="lazy"
+        decoding="async"
+      />
+      <figcaption>Dark · cute · alternative</figcaption>
+    </figure>
+  </div>
+</article>
+
+<style>
+  .black-rous {
+    position: relative;
+    overflow: hidden;
+    border-top: 1px solid rgb(255 255 255 / 8%);
+    background: #080608;
+    color: #f8eef5;
+  }
+  .black-rous-inner {
+    display: grid;
+    grid-template-columns: minmax(19rem, 0.75fr) minmax(0, 1.25fr);
+    gap: clamp(3rem, 8vw, 8rem);
+    align-items: center;
+    min-height: 52rem;
+    padding-block: clamp(6rem, 12vw, 10rem);
+  }
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgb(255 255 255 / 14%);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .project-meta p {
+    margin: 0;
+  }
+  .status {
+    color: #ff79b7;
+  }
+  .status span {
+    display: inline-block;
+    width: 0.38rem;
+    height: 0.38rem;
+    margin-right: 0.45rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  h3 {
+    margin: 3rem 0 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    font-weight: 400;
+    letter-spacing: -0.065em;
+    line-height: 0.85;
+  }
+  .summary {
+    max-width: 23rem;
+    margin: 2.5rem 0 0;
+    color: rgb(248 238 245 / 74%);
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  }
+  .role {
+    max-width: 19rem;
+    margin: 5rem 0 0;
+    color: rgb(248 238 245 / 46%);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  figure {
+    position: relative;
+    margin: 0;
+  }
+  figure img {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+  figcaption {
+    position: relative;
+    margin-top: 1.25rem;
+    color: rgb(248 238 245 / 48%);
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-align: right;
+    text-transform: uppercase;
+  }
+  @media (max-width: 48rem) {
+    .black-rous-inner {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding-block: 6rem;
+    }
+    figure {
+      grid-row: 1;
+    }
+    .black-rous-copy {
+      grid-row: 2;
+    }
+    h3 {
+      margin-top: 2.5rem;
+    }
+    .role {
+      margin-top: 3.5rem;
+    }
+  }
+  @media (max-width: 25rem) {
+    .project-meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    h3 {
+      font-size: 3.2rem;
+    }
+  }
+</style>

@@ -1,0 +1,203 @@
+---
+import type { Project } from "../../data/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<article class="bank-g" aria-labelledby="bank-g-title">
+  <div class="bank-g-inner content-width">
+    <div class="brand-field">
+      <img
+        class="bank-mark"
+        src="/projects/bank-g/bank-g-mark-white.svg"
+        alt=""
+        width="1000"
+        height="1000"
+        loading="lazy"
+        decoding="async"
+      />
+      <img
+        class="bank-lockup"
+        src="/projects/bank-g/bank-g-lockup-horizontal-white-live.svg"
+        alt="Bank G"
+        width="1320"
+        height="420"
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+    <div class="bank-copy">
+      <div class="project-meta">
+        <p>Producto Magic Systems</p>
+        <p class="status"><span aria-hidden="true"></span> Disponible</p>
+      </div>
+      <h3 id="bank-g-title" class="sr-title">Bank G</h3>
+      <p class="summary">{project.summary}</p>
+      {
+        project.website && (
+          <a href={project.website} target="_blank" rel="noreferrer">
+            Conocer Bank G <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+      <p class="endorsement">A product by <strong>Magic Systems</strong></p>
+    </div>
+  </div>
+</article>
+
+<style>
+  .bank-g {
+    --bank-background: #0b1324;
+    --bank-accent: #0d8fa0;
+    position: relative;
+    min-height: 52rem;
+    overflow: hidden;
+    background: var(--bank-background);
+    color: #fff;
+  }
+  .bank-g::before {
+    position: absolute;
+    inset: 0 0 auto;
+    height: clamp(5rem, 10vw, 9rem);
+    background: linear-gradient(
+      180deg,
+      var(--ms-color-surface),
+      var(--bank-background)
+    );
+    content: "";
+  }
+  .bank-g-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+    gap: clamp(3rem, 8vw, 8rem);
+    align-items: center;
+    min-height: 52rem;
+    padding-block: clamp(9rem, 15vw, 13rem) 7rem;
+  }
+  .brand-field {
+    position: relative;
+    display: grid;
+    min-height: 28rem;
+    place-items: center;
+  }
+  .bank-mark {
+    position: absolute;
+    width: min(100%, 34rem);
+    opacity: 0.07;
+  }
+  .bank-lockup {
+    position: relative;
+    width: min(100%, 36rem);
+    height: auto;
+  }
+  .bank-copy {
+    align-self: end;
+    padding-bottom: 1rem;
+  }
+  .project-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid rgb(255 255 255 / 17%);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .project-meta p {
+    margin: 0;
+  }
+  .status {
+    color: #72d9df;
+  }
+  .status span {
+    display: inline-block;
+    width: 0.38rem;
+    height: 0.38rem;
+    margin-right: 0.45rem;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  .sr-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .summary {
+    max-width: 20ch;
+    margin: 3rem 0 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1.04;
+  }
+  .bank-copy > a {
+    display: inline-flex;
+    gap: 2rem;
+    margin-top: 2.5rem;
+    padding-bottom: 0.35rem;
+    border-bottom: 1px solid var(--bank-accent);
+    color: #fff;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+  .endorsement {
+    margin: 5rem 0 0;
+    color: rgb(255 255 255 / 58%);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+  .endorsement strong {
+    display: block;
+    margin-top: 0.2rem;
+    color: #fff;
+    font-family: var(--ms-font-display);
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+  @media (max-width: 48rem) {
+    .bank-g,
+    .bank-g-inner {
+      min-height: auto;
+    }
+    .bank-g-inner {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding-block: 8rem 6rem;
+    }
+    .brand-field {
+      min-height: 19rem;
+    }
+    .bank-lockup {
+      width: min(100%, 30rem);
+    }
+    .bank-copy {
+      padding: 0;
+    }
+    .summary {
+      margin-top: 2.5rem;
+    }
+    .endorsement {
+      margin-top: 4rem;
+    }
+  }
+  @media (max-width: 25rem) {
+    .project-meta {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+    .brand-field {
+      min-height: 15rem;
+    }
+  }
+</style>

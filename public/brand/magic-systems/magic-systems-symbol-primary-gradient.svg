@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 170" role="img" aria-labelledby="title desc" shape-rendering="geometricPrecision">
+<title id="title">Magic Systems symbol</title>
+<desc id="desc">Hidden Magic symbol. Frozen Visual Identity V1.0 geometry.</desc>
+<defs>
+<linearGradient id="magicGradient" x1="0%" y1="28%" x2="100%" y2="72%">
+  <stop offset="0%" stop-color="#4B5EFF"/>
+  <stop offset="52%" stop-color="#7054F6"/>
+  <stop offset="100%" stop-color="#934AF5"/>
+</linearGradient>
+</defs>
+<path d="M 21 19 L 19 21 L 19 151 L 20 153 L 23 153 L 71 119 L 71 115 L 48 99 L 48 66 L 50 65 L 57 68 L 71 58 L 71 53 Z M 148 19 L 99 54 L 99 58 L 113 68 L 120 65 L 122 66 L 121 100 L 85 76 L 81 75 L 75 80 L 77 88 L 108 109 L 99 116 L 99 121 L 146 153 L 150 151 L 150 21 Z" fill="url(#magicGradient)" fill-rule="evenodd"/>
+</svg>

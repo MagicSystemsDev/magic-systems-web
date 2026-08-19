@@ -1,0 +1,84 @@
+@import "./tokens.css";
+@import "./motion.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--ms-color-background);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-width: 20rem;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--ms-color-background);
+  color: var(--ms-color-text);
+  font-family: var(--ms-font-sans);
+  font-size: var(--ms-font-size-body);
+  line-height: var(--ms-line-height-body);
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--ms-color-brand-primary);
+  color: var(--ms-color-text);
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.2em;
+}
+
+img,
+picture,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 0.1875rem solid var(--ms-color-system-cyan);
+  outline-offset: 0.1875rem;
+}
+
+.content-width {
+  width: min(100% - 2 * var(--ms-space-6), var(--ms-layout-content));
+  margin-inline: auto;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: var(--ms-space-3);
+  left: var(--ms-space-3);
+  padding: var(--ms-space-2) var(--ms-space-4);
+  transform: translateY(-180%);
+  border-radius: var(--ms-radius-sm);
+  background: var(--ms-color-text);
+  color: var(--ms-color-background);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
