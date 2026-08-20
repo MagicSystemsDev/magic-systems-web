@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-# Sitemap will be added when the official site URL is defined.
+Sitemap: https://magicsystemsdev.github.io/magic-systems-web/sitemap-index.xml

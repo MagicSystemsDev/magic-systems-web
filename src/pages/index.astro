@@ -3,10 +3,24 @@ import Header from "../components/navigation/Header.astro";
 import Hero from "../components/sections/Hero.astro";
 import WhatWeDo from "../components/sections/WhatWeDo.astro";
 import Projects from "../components/sections/Projects.astro";
+import HowWeWork from "../components/sections/HowWeWork.astro";
+import Technology from "../components/sections/Technology.astro";
+import About from "../components/sections/About.astro";
+import Contact from "../components/sections/Contact.astro";
+import Footer from "../components/layout/Footer.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout>
   <Header />
-  <main id="main-content"><Hero /><WhatWeDo /><Projects /></main>
+  <main id="main-content">
+    <Hero />
+    <WhatWeDo />
+    <Projects />
+    <HowWeWork />
+    <Technology />
+    <About />
+    <Contact />
+  </main>
+  <Footer />
 </BaseLayout>

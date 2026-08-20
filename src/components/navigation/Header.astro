@@ -1,16 +1,26 @@
+---
+import { navigation, withBasePath } from "../../data/site";
+
+const headerNavigation = navigation.filter((item) => item.showInHeader);
+---
+
 <header class="site-header" data-header>
   <div class="header-inner content-width">
     <a class="brand" href="#main-content" aria-label="Magic Systems, inicio">
       <img
         class="brand-lockup"
-        src="/brand/magic-systems/magic-systems-lockup-horizontal-dark.svg"
+        src={withBasePath(
+          "brand/magic-systems/magic-systems-lockup-horizontal-dark.svg",
+        )}
         alt="Magic Systems"
         width="720"
         height="215"
       />
       <img
         class="brand-symbol"
-        src="/brand/magic-systems/magic-systems-symbol-primary-gradient.svg"
+        src={withBasePath(
+          "brand/magic-systems/magic-systems-symbol-primary-gradient.svg",
+        )}
         alt=""
         width="50"
         height="50"
@@ -28,10 +38,18 @@
       class="navigation"
       aria-label="Navegación principal"
     >
-      <a href="#que-hacemos">Qué hacemos</a><a href="#proyectos">Proyectos</a><a
-        class="contact-link"
-        href="#que-hacemos">Hablemos</a
-      >
+      {
+        headerNavigation.map((item) => (
+          <a
+            class:list={{
+              "contact-link": "emphasis" in item && item.emphasis,
+            }}
+            href={item.href}
+          >
+            {item.label}
+          </a>
+        ))
+      }
     </nav>
   </div>
 </header>

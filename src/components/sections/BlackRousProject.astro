@@ -1,5 +1,6 @@
 ---
 import type { Project } from "../../data/projects";
+import { withBasePath } from "../../data/site";
 
 interface Props {
   project: Project;
@@ -23,7 +24,7 @@ const { project } = Astro.props;
     </div>
     <figure>
       <img
-        src="/projects/black-rous/black-rous.png"
+        src={withBasePath("projects/black-rous/black-rous.webp")}
         alt=""
         width="1536"
         height="1024"

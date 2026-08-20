@@ -25,7 +25,7 @@ export const projects = [
     status: "live",
     summary:
       "Gestión financiera para operaciones controladas, estructuradas y trazables.",
-    website: null,
+    website: "https://magicsystemsdev.github.io/bank-g-web/",
     featured: true,
     brand: {
       authoritativeSource:

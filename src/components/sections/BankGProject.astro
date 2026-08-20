@@ -1,5 +1,6 @@
 ---
 import type { Project } from "../../data/projects";
+import { withBasePath } from "../../data/site";
 
 interface Props {
   project: Project;
@@ -13,7 +14,7 @@ const { project } = Astro.props;
     <div class="brand-field">
       <img
         class="bank-mark"
-        src="/projects/bank-g/bank-g-mark-white.svg"
+        src={withBasePath("projects/bank-g/bank-g-mark-white.svg")}
         alt=""
         width="1000"
         height="1000"
@@ -22,7 +23,9 @@ const { project } = Astro.props;
       />
       <img
         class="bank-lockup"
-        src="/projects/bank-g/bank-g-lockup-horizontal-white-live.svg"
+        src={withBasePath(
+          "projects/bank-g/bank-g-lockup-horizontal-white-live.svg",
+        )}
         alt="Bank G"
         width="1320"
         height="420"

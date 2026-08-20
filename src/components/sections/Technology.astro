@@ -1,0 +1,94 @@
+---
+const technologies = [
+  "Astro",
+  "TypeScript",
+  "Angular",
+  "Java",
+  "Spring",
+  "MySQL",
+  "Docker",
+  "Cloudflare",
+] as const;
+---
+
+<section id="tecnologia" class="technology" aria-labelledby="technology-title">
+  <div class="technology-inner content-width">
+    <p class="eyebrow">Technology</p>
+    <div class="statement">
+      <h2 id="technology-title">Technology follows the problem.</h2>
+      <p>
+        No comenzamos escogiendo una tecnología. Comenzamos entendiendo qué
+        necesitamos construir.
+      </p>
+    </div>
+    <ul aria-label="Tecnologías utilizadas en proyectos actuales">
+      {technologies.map((technology) => <li>{technology}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .technology {
+    padding-block: clamp(6rem, 12vw, 10rem);
+    background: var(--ms-color-surface);
+    scroll-margin-top: 5rem;
+  }
+  .technology-inner {
+    display: grid;
+    grid-template-columns: 0.7fr 1.4fr 0.9fr;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+  .eyebrow {
+    margin: 0.5rem 0 0;
+    color: var(--ms-color-brand-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 11ch;
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(2.6rem, 5vw, 5rem);
+    font-weight: 500;
+    letter-spacing: -0.055em;
+    line-height: 0.96;
+  }
+  .statement p {
+    max-width: 34rem;
+    margin: 2.5rem 0 0;
+    color: var(--ms-color-text-muted);
+    font-size: clamp(1rem, 1.5vw, 1.2rem);
+  }
+  ul {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--ms-color-border);
+    list-style: none;
+  }
+  li {
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--ms-color-border);
+    color: var(--ms-color-text-muted);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+  }
+  @media (max-width: 48rem) {
+    .technology-inner {
+      grid-template-columns: 1fr;
+    }
+    ul {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 2rem;
+    }
+    li:nth-child(odd) {
+      padding-right: 1rem;
+    }
+    li:nth-child(even) {
+      padding-left: 1rem;
+      border-left: 1px solid var(--ms-color-border);
+    }
+  }
+</style>

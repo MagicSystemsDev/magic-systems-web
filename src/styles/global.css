@@ -68,6 +68,15 @@ button {
   margin-inline: auto;
 }
 
+#que-hacemos,
+#proyectos,
+#como-trabajamos,
+#tecnologia,
+#nosotros,
+#contacto {
+  scroll-margin-top: 6.5rem;
+}
+
 .skip-link {
   position: fixed;
   z-index: 100;

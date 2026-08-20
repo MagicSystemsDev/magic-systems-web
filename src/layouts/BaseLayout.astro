@@ -1,5 +1,5 @@
 ---
-import { siteConfig } from "../data/site";
+import { siteConfig, withBasePath } from "../data/site";
 import "../styles/global.css";
 
 export interface Props {
@@ -22,6 +22,18 @@ const canonicalUrl =
   (siteConfig.siteUrl
     ? new URL(Astro.url.pathname, siteConfig.siteUrl).href
     : undefined);
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: siteConfig.name,
+  url: siteConfig.siteUrl,
+  email: siteConfig.contact.email,
+  founder: {
+    "@type": "Person",
+    name: siteConfig.founder.name,
+    url: siteConfig.founder.url,
+  },
+};
 ---
 
 <!doctype html>
@@ -32,7 +44,12 @@ const canonicalUrl =
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
     {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
-    <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="icon"
+      href={withBasePath("favicon/favicon.svg")}
+      type="image/svg+xml"
+    />
+    <link rel="sitemap" href={withBasePath("sitemap-index.xml")} />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteConfig.name} />
     <meta property="og:title" content={title} />
@@ -46,6 +63,11 @@ const canonicalUrl =
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     {image && <meta name="twitter:image" content={image} />}
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(organization)}
+    />
     <title>{title}</title>
   </head>
   <body>

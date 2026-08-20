@@ -14,10 +14,11 @@ These decisions are closed unless a real technical impossibility is found.
 
 ## Separation of concerns
 
-- **Content:** Astro pages and responsibility-based Header, Hero, and What We Do components.
+- **Content:** Astro pages and responsibility-based navigation, corporate section, project showcase, and footer components.
 - **Presentation:** layouts, scoped component styles, and shared CSS foundations.
 - **Brand assets:** approved local exports under `public/`; never runtime dependencies on other repositories.
 - **Project data:** typed, centralized records in `src/data/projects.ts`.
+- **Reusable corporate data:** navigation, founder, contact, and stable site metadata in `src/data/site.ts`.
 
 ## Typography
 

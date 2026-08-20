@@ -1,6 +1,6 @@
 # Magic Systems Web
 
-Corporate website for Magic Systems. The current delivery includes the V1 corporate shell and the featured project universes for Bank G and Black Rous.
+Corporate website for Magic Systems. The Home now presents the complete V1 narrative: corporate positioning, featured projects, working approach, technology principles, company, founder, contact destination, and footer.
 
 ## Stack
 
@@ -28,10 +28,16 @@ npm run preview
 
 `validate` runs formatting, lint, Astro/TypeScript checks, and the production build.
 
+## Deployment
+
+Planned production URL: `https://magicsystemsdev.github.io/magic-systems-web/`
+
+Deployment uses GitHub Pages through the dedicated GitHub Actions workflow. In repository settings, Pages must use **GitHub Actions** as its source. Local production validation is available with `npm run build` followed by `npm run preview`.
+
 ## Architecture
 
 Pages and layouts live in `src/`, stable typed content in `src/data/`, shared foundations in `src/styles/`, and approved static assets in `public/`. See `docs/ARCHITECTURE.md` and `docs/BRAND_ASSETS.md`.
 
 ## Status
 
-Delivery 3 projects. Remaining corporate sections, final contact/footer, public URLs, and deployment are intentionally pending.
+Delivery 5 production readiness. The V1 Home, production metadata, project base path, sitemap, and deployment workflow are ready for the final checkpoint and first push.

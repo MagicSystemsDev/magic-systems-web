@@ -1,0 +1,144 @@
+---
+import { siteConfig, withBasePath } from "../../data/site";
+---
+
+<section id="nosotros" class="about" aria-labelledby="about-title">
+  <div class="about-inner content-width">
+    <header>
+      <p class="eyebrow">About</p>
+      <h2 id="about-title">Sobre Magic Systems</h2>
+    </header>
+    <div class="about-copy">
+      <p class="lead">
+        Magic Systems nace de una forma simple de entender el desarrollo de
+        software: comprender antes de construir.
+      </p>
+      <p>
+        Tratamos cada producto y cada solución como un sistema que debe poder
+        mantenerse, evolucionar y demostrar que funciona. El criterio guía la
+        tecnología; la intención guía cada decisión.
+      </p>
+    </div>
+    <aside aria-label="Fundador de Magic Systems">
+      <p class="founder-label">Founder</p>
+      <p class="founder-name">{siteConfig.founder.name}</p>
+      <p class="founder-role">{siteConfig.founder.role}</p>
+      {
+        siteConfig.founder.url && (
+          <a href={siteConfig.founder.url} target="_blank" rel="noreferrer">
+            Conocer al fundador <span aria-hidden="true">↗</span>
+          </a>
+        )
+      }
+    </aside>
+    <img
+      src={withBasePath(
+        "brand/magic-systems/magic-systems-symbol-primary-gradient.svg",
+      )}
+      alt=""
+      width="170"
+      height="170"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+</section>
+
+<style>
+  .about {
+    padding-block: clamp(7rem, 14vw, 12rem);
+    background: var(--ms-color-background);
+    scroll-margin-top: 5rem;
+  }
+  .about-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.35fr 0.65fr;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+  .eyebrow,
+  .founder-label {
+    margin: 0 0 1.5rem;
+    color: var(--ms-color-brand-primary);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  h2 {
+    max-width: 10ch;
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(2.5rem, 4.8vw, 4.75rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .about-copy p {
+    max-width: 38rem;
+    margin: 0;
+    color: var(--ms-color-text-muted);
+  }
+  .about-copy .lead {
+    color: var(--ms-color-text);
+    font-family: var(--ms-font-display);
+    font-size: clamp(1.5rem, 2.7vw, 2.5rem);
+    letter-spacing: -0.03em;
+    line-height: 1.2;
+  }
+  .lead + p {
+    margin-top: 2rem;
+  }
+  aside {
+    align-self: end;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--ms-color-border);
+  }
+  .founder-label {
+    margin-bottom: 2rem;
+    color: var(--ms-color-system-cyan);
+  }
+  .founder-name {
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: 1.25rem;
+  }
+  .founder-role {
+    margin: 0.35rem 0 0;
+    color: var(--ms-color-text-muted);
+    font-size: 0.8rem;
+  }
+  aside a {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 0.78rem;
+  }
+  img {
+    position: absolute;
+    right: 0;
+    bottom: -7rem;
+    width: clamp(4rem, 8vw, 7rem);
+    opacity: 0.18;
+  }
+  @media (max-width: 50rem) {
+    .about-inner {
+      grid-template-columns: 1fr 1.5fr;
+    }
+    aside {
+      grid-column: 2;
+      margin-top: 2rem;
+    }
+  }
+  @media (max-width: 36rem) {
+    .about-inner {
+      grid-template-columns: 1fr;
+    }
+    aside {
+      grid-column: auto;
+      margin-top: 2rem;
+    }
+    img {
+      bottom: -5rem;
+    }
+  }
+</style>

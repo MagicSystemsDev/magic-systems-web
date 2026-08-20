@@ -1,0 +1,129 @@
+---
+const stages = [
+  {
+    number: "01",
+    title: "Understand",
+    description:
+      "Comprendemos primero el problema, el negocio y las restricciones.",
+  },
+  {
+    number: "02",
+    title: "Build",
+    description:
+      "Diseñamos y construimos lo necesario para resolverlo correctamente.",
+  },
+  {
+    number: "03",
+    title: "Validate",
+    description:
+      "Probamos y verificamos antes de considerar una entrega terminada.",
+  },
+] as const;
+---
+
+<section id="como-trabajamos" class="how-we-work" aria-labelledby="work-title">
+  <div class="content-width">
+    <header class="section-heading">
+      <p class="eyebrow">Engineering signature</p>
+      <div>
+        <h2 id="work-title">Cómo trabajamos</h2>
+        <p class="signature">
+          <span>Designed with intent.</span>
+          <span>Built with care.</span>
+          <span>Validated with evidence.</span>
+        </p>
+      </div>
+    </header>
+
+    <ol class="stages">
+      {
+        stages.map((stage) => (
+          <li>
+            <p class="number">{stage.number}</p>
+            <div>
+              <h3>{stage.title}</h3>
+              <p>{stage.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .how-we-work {
+    position: relative;
+    padding-block: clamp(7rem, 14vw, 12rem);
+    border-top: 1px solid var(--ms-color-border);
+    background: var(--ms-color-background);
+    scroll-margin-top: 5rem;
+  }
+  .section-heading {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+  }
+  .eyebrow {
+    margin: 0.5rem 0 0;
+    color: var(--ms-color-system-cyan);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  h2 {
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(2.5rem, 5vw, 4.75rem);
+    font-weight: 500;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .signature {
+    display: grid;
+    margin: 2.5rem 0 0;
+    color: var(--ms-color-text-muted);
+    font-family: var(--ms-font-display);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    line-height: 1.5;
+  }
+  .stages {
+    margin: clamp(5rem, 10vw, 9rem) 0 0;
+    padding: 0;
+    border-top: 1px solid var(--ms-color-border);
+    list-style: none;
+  }
+  .stages li {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    padding-block: clamp(2rem, 4vw, 3.5rem);
+    border-bottom: 1px solid var(--ms-color-border);
+  }
+  .number {
+    margin: 0.5rem 0 0;
+    color: var(--ms-color-brand-primary);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--ms-font-display);
+    font-size: clamp(1.8rem, 3vw, 3rem);
+    font-weight: 500;
+    letter-spacing: -0.035em;
+  }
+  h3 + p {
+    max-width: 35rem;
+    margin: 1.25rem 0 0;
+    color: var(--ms-color-text-muted);
+  }
+  @media (max-width: 43rem) {
+    .section-heading,
+    .stages li {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

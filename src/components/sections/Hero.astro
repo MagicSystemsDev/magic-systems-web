@@ -1,3 +1,7 @@
+---
+import { withBasePath } from "../../data/site";
+---
+
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero-grid content-width">
     <div class="hero-copy">
@@ -9,13 +13,15 @@
       </p><div class="actions">
         <a class="primary-action" href="#que-hacemos"
           >Qué hacemos <span aria-hidden="true">↘</span></a
-        ><a class="secondary-action" href="#que-hacemos">Hablemos</a>
+        ><a class="secondary-action" href="#contacto">Hablemos</a>
       </div>
     </div>
     <div class="hidden-magic" aria-hidden="true">
       <span class="orbit"></span><span class="guide guide-one"></span><span
         class="guide guide-two"></span><img
-        src="/brand/magic-systems/magic-systems-symbol-primary-gradient.svg"
+        src={withBasePath(
+          "brand/magic-systems/magic-systems-symbol-primary-gradient.svg",
+        )}
         alt=""
         width="170"
         height="170"
