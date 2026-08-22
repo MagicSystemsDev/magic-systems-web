@@ -1,7 +1,7 @@
 # Development Workflow
 
-**Version:** 1.0  
-**Last reviewed:** 2026-08-16  
+**Version:** 1.1  
+**Last reviewed:** 2026-08-22  
 **Status:** Active
 
 ---
@@ -108,6 +108,26 @@ CONTEXT contains:
 CONTEXT helps explain **why** decisions were made.
 
 It does not replace LOCAL or REMOTE.
+
+---
+
+## 2.3 Automation First
+
+If an inspection, validation, comparison, evidence collection, or certification action is repeated two or more times and can be expressed deterministically, evaluate converting it into a reusable tool before continuing to delegate it manually to an agent.
+
+The objective is to reserve AI capacity for:
+
+- interpreting anomalies;
+- making technical decisions;
+- designing or correcting implementation;
+- evaluating risk and evidence;
+- resolving cases that cannot be reduced to deterministic execution.
+
+Prefer scripts, test harnesses, fixtures, structured outputs, and report generators for repeatable work. Choose the implementation technology according to the task and project stack; Automation First does not imply a mandatory programming language.
+
+Automation must preserve or improve the existing quality gate. Reducing Codex usage is not a reason to weaken validation, omit evidence, or hide failures.
+
+When full automation would cost more than the expected repetition, document the decision and keep the procedure focused and reproducible.
 
 ---
 
@@ -246,6 +266,17 @@ Avoid using Codex exclusively for:
 - administrative repository operations.
 
 Codex should spend its capacity primarily on development work where repository understanding provides meaningful value.
+
+For repeated deterministic work, Codex should prefer running or improving an existing automation entry point over reconstructing the procedure interactively. If no suitable tool exists and the procedure is expected to recur, the task should evaluate creating one within the authorized scope.
+
+Automation should emit concise, inspectable evidence whenever practical, such as:
+
+```text
+human-readable summary
+structured JSON result
+logs or artifacts for failed gates
+effective runtime and dependency versions
+```
 
 ---
 
@@ -386,6 +417,18 @@ Expected final report
 ```
 
 This reduces unnecessary Codex exploration and keeps implementation sessions focused.
+
+When a micro-delivery includes repeated certification or validation steps, it should also identify:
+
+```text
+Existing automation entry points
+
+Missing deterministic tooling
+
+Expected reusable artifacts
+
+Conditions that require agent interpretation
+```
 
 ---
 
@@ -664,6 +707,8 @@ Work / specialized agentic workflows
 This is not a strict hierarchy.
 
 The correct tool depends on whether the task requires local repository access, remote repository access, reasoning, or artifact manipulation.
+
+Within any selected tool, prefer an existing deterministic workflow over repeated interactive execution when both satisfy the same requirement.
 
 ---
 
