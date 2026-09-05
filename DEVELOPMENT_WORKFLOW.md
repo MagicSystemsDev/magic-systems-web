@@ -1,7 +1,7 @@
 # Development Workflow
 
-**Version:** 1.1  
-**Last reviewed:** 2026-08-22  
+**Version:** 2.0
+**Last reviewed:** 2026-09-05
 **Status:** Active
 
 ---
@@ -13,6 +13,7 @@ This document defines the standard development workflow used for projects manage
 - Pedro
 - ChatGPT
 - Codex
+- Kiro
 - Git
 - GitHub
 
@@ -26,6 +27,17 @@ The objective is to maintain a reliable development process while:
 - minimizing unnecessary deployments and repository operations.
 
 This workflow is project-independent and should be applied consistently unless a project explicitly documents an exception.
+
+The certified operating architecture is:
+
+```text
+Pedro   = AUTHORIZES
+ChatGPT = WHAT
+Codex   = HOW
+Kiro    = ASSURES
+```
+
+**AI recommends — Pedro authorizes.** A PASS from an agent is evidence, not automatic authorization.
 
 ---
 
@@ -159,128 +171,75 @@ If Codex reports valid uncommitted local changes, those changes may legitimately
 
 ---
 
-# 4. Responsibilities
+# 4. Responsibilities and operating planes
 
-## 4.1 Pedro
+## 4.1 Pedro — Human Authority
 
-Pedro owns final product and development decisions.
+Pedro retains final human authority. By default, Pedro alone accepts or rejects architecture and findings, authorizes implementation, and authorizes exceptions to this workflow. Pedro also holds the default authority for commit, push, merge, release, credentials, secrets, sensitive actions, cloud mutations, spending or resource expansion, and permission elevation.
 
-Responsibilities include:
+## 4.2 ChatGPT — Control / Decision Plane
 
-- defining business requirements;
-- providing customer feedback;
-- approving architecture decisions;
-- approving checkpoints;
-- performing simple local Git operations;
-- deciding when work should be committed;
-- deciding when work should be pushed;
-- reviewing final outcomes.
+ChatGPT owns the **WHAT**: architecture, planning, micro-delivery design, contracts, acceptance criteria, strategy, tool and agent selection, product analysis, conceptual review, documentation, and evidence interpretation. It may inspect and reconstruct REMOTE state through GitHub when appropriate.
 
-Typical Git operations handled manually include:
+ChatGPT can review architecture, reasoning, and evidence, but **ChatGPT is not the independent implementation assurance layer**. Independent implementation review belongs to `magic-reviewer`; `magic-orchestrator` only routes between Kiro specialists when routing is genuinely ambiguous.
 
-```bash
-git status
-git diff
-git add
-git commit
-git push
-```
+## 4.3 Codex — Implementation Plane
 
-These operations should normally not consume Codex capacity.
-
----
-
-# 5. ChatGPT responsibilities
-
-ChatGPT acts primarily as:
-
-- technical architect;
-- development planner;
-- analysis layer;
-- repository reviewer;
-- decision facilitator;
-- documentation assistant;
-- Codex instruction designer.
-
-ChatGPT should be preferred for:
-
-- architecture;
-- domain modeling;
-- technical decisions;
-- researching implementation approaches;
-- evaluating alternatives;
-- analyzing customer feedback;
-- designing micro-deliveries;
-- reviewing published repositories;
-- reviewing commits;
-- reviewing GitHub CI;
-- reviewing pull requests;
-- preparing commit messages;
-- planning migrations;
-- documenting decisions.
-
-Whenever appropriate, ChatGPT should consult GitHub rather than relying exclusively on conversation memory.
-
----
-
-# 6. Codex responsibilities
-
-Codex is reserved primarily for tasks requiring direct understanding or modification of the local codebase.
-
-Examples include:
-
-- multi-file implementations;
-- refactoring;
-- repository-wide changes;
-- complex debugging;
-- migrations;
-- dependency changes;
-- test implementation;
-- build troubleshooting;
-- deep codebase exploration;
-- architectural changes requiring edits across multiple layers.
-
-Codex should not normally be used for mechanical repository administration.
-
----
-
-# 7. Codex usage optimization
-
-Codex capacity is considered a limited development resource.
-
-Before assigning work to Codex, ask:
-
-> Does this task require understanding or modifying the local repository?
-
-If the answer is **no**, attempt to solve it with ChatGPT, GitHub, Git, or manual tooling first.
-
-Avoid using Codex exclusively for:
-
-- checking GitHub;
-- creating ordinary commit messages;
-- performing simple commits;
-- pushing;
-- checking whether CI completed;
-- reading already-published documentation;
-- reviewing simple GitHub metadata;
-- administrative repository operations.
-
-Codex should spend its capacity primarily on development work where repository understanding provides meaningful value.
-
-For repeated deterministic work, Codex should prefer running or improving an existing automation entry point over reconstructing the procedure interactively. If no suitable tool exists and the procedure is expected to recur, the task should evaluate creating one within the authorized scope.
-
-Automation should emit concise, inspectable evidence whenever practical, such as:
+Codex is the principal writer and implementer. It handles implementation, refactoring, tests, debugging, migrations, dependency and configuration changes, build troubleshooting, multi-file changes, and repository-wide changes.
 
 ```text
-human-readable summary
-structured JSON result
-logs or artifacts for failed gates
-effective runtime and dependency versions
+One writer by default.
+Codex owns HOW, not authorization.
+```
+
+Current baseline:
+
+```yaml
+Codex:
+  Model: GPT-5.6 Terra
+  Effort: Medium
+```
+
+Do not escalate merely because a change spans many files; escalate only for a material technical reason. Codex may inspect Git and modify the authorized working tree, but unless explicitly approved:
+
+```text
+DO NOT COMMIT
+DO NOT PUSH
+```
+
+## 4.4 Kiro — Assurance Plane
+
+Kiro supplies specialist evidence and independent implementation assurance. It is not mandatory workflow ceremony.
+
+### `magic-investigator`
+
+`magic-investigator` is a read-only factual and evidence specialist. Use it only when material LOCAL evidence is missing for a decision—for example repository state, documentation, current implementation, branch/worktree state, configuration, or commit-local evidence.
+
+```text
+Use investigator to close an evidence gap, not to repeat evidence already available.
+```
+
+It must not present inference as observation or claim global absence beyond the scope actually inspected. It may inspect Git read-only.
+
+### `magic-reviewer`
+
+`magic-reviewer` is the independent read-only implementation reviewer. It assesses defects, regressions, contracts, risk, validation, acceptance criteria, scope, tests, and implementation evidence.
+
+Its verdicts are `PASS`, `NEEDS_CHANGES`, and `BLOCKED`. It must not use model memory as a finding; absence of evidence does not automatically establish incompatibility. Prefer commit-local evidence, falsify candidates before a verdict, and consolidate findings with the same cause. A `LOW` finding alone does not produce `NEEDS_CHANGES`; optional hardening or additional test coverage is not a material defect. It may inspect the Git diff and history needed for review, but never mutates Git.
+
+### `magic-orchestrator`
+
+`magic-orchestrator` is an **OPTIONAL ROUTER** between `magic-investigator` and `magic-reviewer`. Use it only when there is genuine ambiguity about which Kiro specialist should act.
+
+It does not replace ChatGPT, design architecture, write code, become a mandatory wrapper, or run when the executor is known. It needs no Git operations for normal routing.
+
+```text
+Known executor → invoke it directly.
 ```
 
 ---
 
-# 8. Work mode
+# 5. Work mode
 
 ChatGPT Work is not part of the normal development loop.
 
@@ -297,7 +256,52 @@ Do not use Work merely to inspect a local repository when the same objective can
 
 ---
 
-# 9. GitHub responsibilities
+# 6. Evidence discipline and routing
+
+The global steering policy at `C:\Users\pedro\.kiro\steering\magic-evidence-discipline.md` governs evidence handling. Across every plane:
+
+- distinguish `OBSERVED`, `INFERRED`, and `PROPOSED`;
+- declare uncertainty;
+- do not attribute an origin without evidence;
+- prefer local evidence;
+- limit claims to demonstrated scope; and
+- treat platform/account usage metrics as authoritative over estimates.
+
+Use the smallest agent topology that satisfies the task. Do not use two agents when one is enough.
+
+| Need | Default executor |
+| --- | --- |
+| Architecture or planning | ChatGPT |
+| Human authorization | Pedro |
+| Factual LOCAL repository investigation | `magic-investigator` |
+| Implementation or code writing | Codex |
+| Independent review or verdict | `magic-reviewer` |
+| Ambiguous Kiro specialist routing | `magic-orchestrator` |
+| Simple task with a known executor | Invoke that executor directly |
+| Repeated deterministic operation | Automation First |
+
+Do not add an agent when ChatGPT already has sufficient evidence, when a reviewer is already known to be required, for trivial documentation changes, or when deterministic automation is sufficient.
+
+**Optimize topology before model/capacity.** Decide in this order:
+
+1. Does any agent need to run?
+2. Which single specialist satisfies the need?
+3. Does a second specialist add material value?
+4. Only then, should model or capacity be escalated?
+
+For Kiro, the reviewer baseline is `Auto`; use the investigator only for missing evidence and the orchestrator only for real routing ambiguity. Estimated tool-call counts are not authoritative economic accounting.
+
+## 6.1 Independent review policy
+
+Independent review is **REQUIRED** by default for security; authentication or authorization; persistent data or migrations; financial or business invariants; cloud or infrastructure; cross-repository contracts; core architecture; high-impact refactors; release candidates; recovery after material validation failures; and changes with significant implementation uncertainty.
+
+It is **RECOMMENDED** for ordinary multi-file features, significant bug fixes, meaningful behavioral changes, test-architecture changes, and non-trivial dependency or configuration changes.
+
+It is **NOT REQUIRED BY DEFAULT** for typos, copy, comments, pure documentation, formatting, simple administrative changes, and deterministic mechanically obvious changes. Pedro may require review in any case.
+
+---
+
+# 7. GitHub responsibilities
 
 GitHub represents the latest published and verifiable project checkpoint.
 
@@ -318,7 +322,7 @@ GitHub should be used to reconstruct the published technical state of a project.
 
 ---
 
-# 10. GitHub write policy
+# 8. GitHub write policy
 
 Although integrations may technically permit write operations, ChatGPT should not normally modify production code directly in GitHub.
 
@@ -348,7 +352,7 @@ GitHub write operations from ChatGPT should only be used when explicitly justifi
 
 ---
 
-# 11. New session startup protocol
+# 9. New session startup protocol
 
 When starting a new ChatGPT conversation for an existing project:
 
@@ -367,7 +371,7 @@ This allows a project to remain recoverable even if old conversations are eventu
 
 ---
 
-# 12. Multi-repository projects
+# 10. Multi-repository projects
 
 For projects composed of multiple repositories, ChatGPT should treat them as parts of one system.
 
@@ -392,7 +396,7 @@ Codex should only receive the repositories required for the current implementati
 
 ---
 
-# 13. Micro-deliveries
+# 11. Micro-deliveries
 
 Development work should be divided into coherent micro-deliveries.
 
@@ -432,7 +436,7 @@ Conditions that require agent interpretation
 
 ---
 
-# 14. Standard Codex completion requirements
+# 12. Standard Codex completion requirements
 
 Unless explicitly instructed otherwise, every Codex development task should end with:
 
@@ -464,7 +468,7 @@ Codex should report failures clearly.
 
 ---
 
-# 15. Default Codex Git rule
+# 13. Default Codex Git rule
 
 Unless explicitly approved for a particular task:
 
@@ -479,7 +483,7 @@ Checkpoint management remains a separate development decision.
 
 ---
 
-# 16. Commit policy
+# 14. Commit policy
 
 A commit should represent a coherent recoverable development state.
 
@@ -509,7 +513,7 @@ If yes, it is probably a valid checkpoint.
 
 ---
 
-# 17. Push policy
+# 15. Push policy
 
 A local commit does not automatically require a push.
 
@@ -542,7 +546,7 @@ Project-specific deployment policies take precedence when documented.
 
 ---
 
-# 18. Post-push validation
+# 16. Post-push validation
 
 After a checkpoint is pushed, ChatGPT can validate the REMOTE state using GitHub.
 
@@ -560,7 +564,7 @@ Codex does not need to be used solely for remote verification.
 
 ---
 
-# 19. Pull requests
+# 17. Pull requests
 
 Pull requests are optional and depend on project complexity and team needs.
 
@@ -583,7 +587,7 @@ The workflow may evolve as team size increases.
 
 ---
 
-# 20. Durable documentation
+# 18. Durable documentation
 
 Important project decisions must not exist only inside ChatGPT conversations.
 
@@ -605,7 +609,7 @@ The exact structure depends on each project.
 
 ---
 
-# 21. Documentation roles
+# 19. Documentation roles
 
 Use documentation according to purpose.
 
@@ -637,7 +641,7 @@ Tracks accepted or unresolved technical issues.
 
 ---
 
-# 22. Project conversations
+# 20. Project conversations
 
 ChatGPT Projects are useful for:
 
@@ -651,9 +655,22 @@ They should not become the only storage location for important technical decisio
 
 Anything required to rebuild or correctly understand the project should eventually be documented in the repository.
 
+## 20.1 Project Source mirror rule
+
+For this workflow:
+
+```text
+Repository DEVELOPMENT_WORKFLOW.md → AUTHORITATIVE SOURCE
+ChatGPT Project Source copy        → SYNCHRONIZED OPERATIONAL MIRROR
+```
+
+The Project Source copy provides immediate context when a conversation begins. After an approved and published workflow update, first update, commit, and push the authoritative repository version, then replace the corresponding copies in relevant ChatGPT Projects. If versions differ, the repository wins. Use `Version` and `Last reviewed` to detect desynchronization.
+
+Do not create independent workflow variants for Bank G, Black Rous, or other products. Their particular rules belong in project-specific files such as `AGENTS.md`, `ARCHITECTURE.md`, and documentation under `docs/`.
+
 ---
 
-# 23. Plugin policy
+# 21. Plugin policy
 
 External integrations should follow the principle of least privilege.
 
@@ -669,9 +686,22 @@ Selected repositories > All repositories
 
 Access should be expanded only when necessary.
 
+Agent permissions follow the same rule:
+
+```text
+magic-investigator → read-only
+magic-reviewer     → read-only
+magic-orchestrator → routing/subagent only
+Codex              → writer only within authorized scope
+ChatGPT            → no direct production GitHub mutation by default
+Pedro              → credentials and sensitive-authorization boundary
+```
+
+Do not expose secrets unnecessarily or elevate Kiro or an IDE to administrator without explicit need. New credentials, permissions, external mutations, or spending require Pedro's authorization.
+
 ---
 
-# 24. Current integration strategy
+# 22. Current integration strategy
 
 The default development integration is GitHub.
 
@@ -686,87 +716,57 @@ should only be added when a specific development need justifies them.
 
 Avoid creating unnecessary parallel sources of truth.
 
+`magic-development-mcp` is **PRESERVE / FREEZE — NOT CURRENTLY REQUIRED**. It is an experimental/frozen foundation and not part of the default development workflow. Do not automatically continue Assignment, WriterLock, MCP tools, Kiro integration, or Codex integration.
+
+Reopen it only for a concrete unmet need, such as multiple concurrent writers, deterministic writer locking, a durable delivery ledger, persistent multi-repository coordination, automated handoffs, missing enforcement capabilities, or large-scale automated auditability. Do not delete the repository.
+
 ---
 
-# 25. Tool selection rule
+# 23. Tool selection rule
 
 Use the simplest capable tool.
 
-Preferred order:
-
-```text
-ChatGPT
-↓
-Git / GitHub
-↓
-Codex
-↓
-Work / specialized agentic workflows
-```
-
-This is not a strict hierarchy.
-
-The correct tool depends on whether the task requires local repository access, remote repository access, reasoning, or artifact manipulation.
+The routing matrix in section 6 is the default selection rule; it is not a strict hierarchy. The correct tool depends on whether the task requires authorization, reasoning, local or remote repository access, implementation, evidence, independent assurance, or artifact manipulation.
 
 Within any selected tool, prefer an existing deterministic workflow over repeated interactive execution when both satisfy the same requirement.
 
 ---
 
-# 26. Standard development loop
-
-The default workflow is:
+# 24. Standard development loop
 
 ```text
 Requirement / feedback
-        │
-        ▼
-Pedro + ChatGPT
-        │
-        ├─ analyze
-        ├─ define architecture
-        ├─ inspect GitHub
-        └─ design micro-delivery
-        │
-        ▼
-Codex instruction
-        │
-        ▼
-Codex
-        │
-        ├─ modify LOCAL repository
-        ├─ validate
-        └─ report git status
-        │
-        ▼
-Pedro + ChatGPT review
-        │
-        ├─ more work needed
-        │      ↓
-        │   next micro-delivery
-        │
-        └─ checkpoint ready
-               │
-               ▼
-            Git LOCAL
-               │
-         commit when coherent
-               │
-               ▼
-         decide when to push
-               │
-               ▼
-             GitHub
-               │
-               ▼
-        ChatGPT validation
-               │
-               ▼
-         Delivery closed
+        ↓
+Pedro + ChatGPT define WHAT / architecture / contract
+        ↓
+Is material LOCAL evidence missing?
+        ├─ yes → magic-investigator
+        └─ no
+        ↓
+Codex implements HOW + validates + handoff
+        ↓
+Does risk/change require independent review?
+        ├─ yes → magic-reviewer
+        └─ no
+        ↓
+Pedro + ChatGPT interpret result / decide
+        ↓
+more work OR accepted
+        ↓
+Pedro Git checkpoint
+        ↓
+commit when coherent → decide when to push → GitHub
+        ↓
+ChatGPT REMOTE validation
+        ↓
+Delivery closed
 ```
+
+`magic-orchestrator` is intentionally absent from the happy path: it is exceptional routing support, not a workflow stage.
 
 ---
 
-# 27. Recovery rule
+# 25. Recovery rule
 
 A project should remain understandable even if historical ChatGPT conversations are deleted.
 
@@ -782,7 +782,7 @@ No critical project knowledge should depend exclusively on AI memory.
 
 ---
 
-# 28. Final operational rule
+# 26. Final operational rule
 
 Before every task, determine which category it belongs to:
 
@@ -802,13 +802,25 @@ Handle locally.
 
 Use Codex.
 
+### Material LOCAL factual evidence gap
+
+Use `magic-investigator`.
+
+### Independent implementation assurance
+
+Use `magic-reviewer` when required or justified by the review policy.
+
+### Ambiguous Kiro specialist choice
+
+Use `magic-orchestrator` only for that routing decision.
+
 ### Specialized agentic artifact workflow
 
 Use Work only when justified.
 
 ---
 
-# 29. Change management
+# 27. Change management
 
 This workflow is intended to be stable but not immutable.
 
@@ -830,8 +842,8 @@ The `Last reviewed` date should be updated whenever the workflow is formally rec
 
 ---
 
-# 30. Current status
+# 28. Current status
 
-This workflow is the active standard for projects managed collaboratively by Pedro, ChatGPT, and Codex.
+This workflow is the active standard for projects managed collaboratively by Pedro, ChatGPT, Codex, and Kiro.
 
 Any project-specific exception should be documented inside that project's repository rather than silently changing this global workflow.
