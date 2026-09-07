@@ -1,7 +1,7 @@
 # Development Workflow
 
-**Version:** 2.0
-**Last reviewed:** 2026-09-05
+**Version:** 2.1
+**Last reviewed:** 2026-09-06
 **Status:** Active
 
 ---
@@ -125,7 +125,7 @@ It does not replace LOCAL or REMOTE.
 
 ## 2.3 Automation First
 
-If an inspection, validation, comparison, evidence collection, or certification action is repeated two or more times and can be expressed deterministically, evaluate converting it into a reusable tool before continuing to delegate it manually to an agent.
+If an inspection, validation, comparison, evidence collection, or certification action is repeated two or more times and can be expressed deterministically, classify it as an `AUTOMATION CANDIDATE` and evaluate it before continuing to delegate it manually to an agent. A candidate is not an obligation to implement automation.
 
 The objective is to reserve AI capacity for:
 
@@ -137,7 +137,18 @@ The objective is to reserve AI capacity for:
 
 Prefer scripts, test harnesses, fixtures, structured outputs, and report generators for repeatable work. Choose the implementation technology according to the task and project stack; Automation First does not imply a mandatory programming language.
 
-Automation must preserve or improve the existing quality gate. Reducing Codex usage is not a reason to weaken validation, omit evidence, or hide failures.
+Before implementation, evaluate the operation's stability, sufficiently deterministic interfaces, added complexity, required discovery/orchestration/polling, probable implementation and debugging cost, expected future frequency, maintenance, and preservation or improvement of the quality gate. Record one of these outcomes when the evaluation is material:
+
+```text
+AUTOMATION APPROVED
+AUTOMATION DEFERRED
+AUTOMATION REJECTED FOR NOW
+KEEP REPRODUCIBLE EXPLICIT PROCEDURE
+```
+
+Automation must preserve or improve the existing quality gate. Reducing Codex usage is not a reason to weaken validation, omit evidence, or hide failures. Automation First does not require converting every repeated operation into a script: a focused, reproducible explicit procedure is valid when automation costs more than the expected repetition.
+
+Apply a stop-loss before continuing automation work when it starts to require auxiliary infrastructure absent from the original procedure, complex process/container/service discovery, significant polling or readiness handling, multiple wrapper-specific failure modes, or—after an initial remediation—the main problem belongs to the automation rather than the original quality gate. Also stop and reevaluate when manual intervention equals or exceeds the procedure being replaced, or expected maintenance clearly exceeds the benefit. Do not continue because of sunk cost.
 
 When full automation would cost more than the expected repetition, document the decision and keep the procedure focused and reproducible.
 
@@ -223,9 +234,22 @@ It must not present inference as observation or claim global absence beyond the 
 
 ### `magic-reviewer`
 
-`magic-reviewer` is the independent read-only implementation reviewer. It assesses defects, regressions, contracts, risk, validation, acceptance criteria, scope, tests, and implementation evidence.
+`magic-reviewer` is the independent read-only implementation reviewer. It assesses defects, regressions, contracts, risk, validation, acceptance criteria, scope, tests, and implementation evidence. Its preferred review flow is phase-bounded:
+
+1. **Scope / completeness / cheap consistency:** confirm the required capability is present, inspect diff scope and evident material acceptance criteria, and identify related normative or documentation contradictions.
+2. **Deterministic evidence:** consume valid existing evidence before deciding whether any deterministic validation needs re-execution.
+3. **Semantic / adversarial assurance:** examine contracts, invariants, security, persistence, fail-open/fail-closed behavior, edge cases, regressions, interactions, and falsification.
+4. **Verdict:** issue only `PASS`, `NEEDS_CHANGES`, or `BLOCKED`.
+
+A materially unmet acceptance criterion can never result in `PASS`.
 
 Its verdicts are `PASS`, `NEEDS_CHANGES`, and `BLOCKED`. It must not use model memory as a finding; absence of evidence does not automatically establish incompatibility. Prefer commit-local evidence, falsify candidates before a verdict, and consolidate findings with the same cause. A `LOW` finding alone does not produce `NEEDS_CHANGES`; optional hardening or additional test coverage is not a material defect. It may inspect the Git diff and history needed for review, but never mutates Git.
+
+Execution evidence such as `tests PASS`, `build PASS`, or `lint PASS` is reusable execution evidence; it does not alone demonstrate that tests adequately cover the delivery's risk or contract. Coverage adequacy remains a semantic assurance question. The reviewer may inspect behavior actually covered, unexercised invariants, failure modes, edge cases, and adversarial behavior without re-running the entire suite.
+
+When a material finding determines `NEEDS_CHANGES` or `BLOCKED`, complete the current cheap or active phase to a reasonable bound and consolidate related material findings. Record what was `REVIEWED` and what remains `UNREVIEWED DUE TO EARLY EXIT`; do not enter unnecessary later, more expensive phases. This phase-bounded early exit replaces any interpretation of first finding as immediate stop.
+
+For remediation, use a delta review. `DELTA CLOSURE` applies when the original review completed semantic scope: assess the original finding, remediation diff, associated regression, directly related side effects, reusable evidence, and verdict without recertifying the entire delivery. `DELTA + RESUME` applies when the original review ended through early exit: verify remediation, reuse prior evidence, resume only the review sections recorded as pending, then issue a global verdict. Do not repeat what was already certified.
 
 ### `magic-orchestrator`
 
@@ -266,6 +290,10 @@ The global steering policy at `C:\Users\pedro\.kiro\steering\magic-evidence-disc
 - prefer local evidence;
 - limit claims to demonstrated scope; and
 - treat platform/account usage metrics as authoritative over estimates.
+
+When a real platform or account metric exists for capacity or credits, `platform/account metric > estimates` for total-consumption analysis. Before/after intervention metrics may support attribution, but any difference between the platform total and recorded deltas remains `UNATTRIBUTED`; never distribute or estimate unobserved consumption artificially.
+
+Reviewers should first consume deterministic evidence that is valid, current, and from the same working tree. Do not automatically re-run formatter, lint, typecheck, tests, builds, Git diff checks, migrations, counts, or other mechanical validations when sufficiently concrete evidence already exists. Independent re-execution remains permitted for a material reason—such as elevated risk, contradiction, a change that could invalidate evidence, or specific falsification—and the reviewer should briefly state why repetition added value.
 
 Use the smallest agent topology that satisfies the task. Do not use two agents when one is enough.
 
@@ -434,6 +462,8 @@ Expected reusable artifacts
 Conditions that require agent interpretation
 ```
 
+Existing deterministic evidence should be identified when available so reviewers can reuse it before re-executing it. If review may end early, the handoff should identify sections as `REVIEWED` or `UNREVIEWED DUE TO EARLY EXIT` so a later delta review can close or resume only the necessary scope.
+
 ---
 
 # 12. Standard Codex completion requirements
@@ -465,6 +495,18 @@ build
 ```
 
 Codex should report failures clearly.
+
+Codex handoffs should prefer these implementation-plane terms:
+
+```text
+IMPLEMENTATION COMPLETE
+IMPLEMENTATION INCOMPLETE
+VALIDATION PASSED
+VALIDATION FAILED
+READY FOR REVIEW
+```
+
+Codex may report known failures, but it does not issue or replace the independent Kiro verdict when independent review is required. `PASS`, `NEEDS_CHANGES`, and `BLOCKED` remain Kiro verdicts.
 
 ---
 
@@ -607,6 +649,8 @@ docs/known-issues.md
 
 The exact structure depends on each project.
 
+Operational peculiarities that have been investigated and are stable and reusable should be evaluated for durable documentation, so agents do not repeatedly spend reasoning capacity rediscovering them. Suitable destinations include `docs/known-issues.md`, runbooks, `AGENTS.md`, or equivalent technical documentation. Do not document every incident automatically; document knowledge when it is sufficiently stable and reusable.
+
 ---
 
 # 19. Documentation roles
@@ -728,7 +772,7 @@ Use the simplest capable tool.
 
 The routing matrix in section 6 is the default selection rule; it is not a strict hierarchy. The correct tool depends on whether the task requires authorization, reasoning, local or remote repository access, implementation, evidence, independent assurance, or artifact manipulation.
 
-Within any selected tool, prefer an existing deterministic workflow over repeated interactive execution when both satisfy the same requirement.
+Within any selected tool, prefer an existing deterministic workflow and reusable valid evidence over repeated interactive execution when both satisfy the same requirement. Automation candidates remain subject to the Automation First evaluation and stop-loss rules.
 
 ---
 
@@ -763,6 +807,8 @@ Delivery closed
 ```
 
 `magic-orchestrator` is intentionally absent from the happy path: it is exceptional routing support, not a workflow stage.
+
+Where independent review occurs, it normally proceeds from cheap scope/completeness checks, through reusable deterministic evidence, to semantic/adversarial assurance. A material finding may end the review after the current phase is reasonably consolidated, with reviewed and pending scope recorded for delta closure or resume.
 
 ---
 
