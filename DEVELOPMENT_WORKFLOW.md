@@ -1,429 +1,222 @@
 # Development Workflow
 
-**Version:** 2.3
-**Last reviewed:** 2026-09-14
-**Status:** Active
+**Version:** 2.4
+**Last reviewed:** 2026-09-17
+**Status:** Pending human certification and publication
 
 ---
 
-## 1. Purpose
+## 1. Purpose and operating topology
 
-This document defines the standard workflow used by Pedro, ChatGPT, Codex, Kiro, Git, and GitHub. It keeps context recoverable, distinguishes LOCAL development from published checkpoints, makes evidence, assurance, closure, and authorization explicit, and avoids unnecessary infrastructure cycles.
+This project-independent workflow provides bounded, recoverable development. LOCAL is authoritative for current work, REMOTE for published GitHub state, and CONTEXT explains decisions but is not current source of truth.
 
-It also protects integrity of evidence and proof boundaries, bounded agent autonomy without authority expansion, and exact scope/artifact integrity where material. It is project-independent unless a project documents an explicit exception.
+    Pedro              = AUTHORIZES
+    ChatGPT             = WHAT
+    magic-investigator  = PROVES
+    Codex               = HOW
+    magic-reviewer      = ASSURES
+    magic-orchestrator  = ROUTES
 
-    Pedro   = AUTHORIZES
-    ChatGPT = WHAT
-    Codex   = HOW
-    Kiro    = ASSURES
+AI recommends; Pedro authorizes. Evidence, PASS, certification, technical safety, model, or effort never grants authority.
 
-AI recommends — Pedro authorizes. Evidence, PASS, certification, or technical safety never grants operational authority automatically.
-
-# 2. Core principles
-
-## 2.1 AI memory is context, not source of truth
-
-ChatGPT memory and Project conversations help with reasoning, history, preferences, and decisions, but are not authoritative representations of the current codebase. Verify repository, runtime evidence, and durable documentation whenever technical accuracy matters.
-
-## 2.2 Distinguish LOCAL, REMOTE, and CONTEXT
-
-LOCAL is authoritative for current development state and can include modifications, uncommitted work, new files, local commits, and experiments. REMOTE is authoritative for published GitHub state, normally origin/main, but is not necessarily newer than LOCAL. CONTEXT explains why decisions were made but does not replace LOCAL or REMOTE.
-
-## 2.3 Automation First
-
-Evaluate repeated deterministic inspection, validation, comparison, evidence, or certification work as an AUTOMATION CANDIDATE; it is not automatically an implementation obligation. Prefer scripts, harnesses, fixtures, structured outputs, and report generators when they preserve or improve the gate. Stop and reevaluate if automation requires absent auxiliary infrastructure, complex discovery/polling, wrapper-specific failures, or more maintenance than benefit. Never reduce evidence or validation merely to save agent capacity.
-
-## 2.4 Bounded assurance and autonomy
-
-Assurance must be strong but bounded. Define the material THREAT MODEL / TRUST BOUNDARY before security-, authority-, privilege-, trust-, or adversarial-sensitive review where practical. A reviewer must not silently expand it during delta review; report a distinct defect as NEW MATERIAL FINDING.
+## 2. Principles and semantic evidence
 
     AUTONOMY != AUTHORITY
+    DISCOVERED NECESSITY != WRITE AUTHORIZATION
+    SEMANTIC EQUIVALENCE != PERMISSION EQUIVALENCE
+    FEWER ALLOW CLICKS != MORE AUTHORITY
+    MORE TEST EXECUTION != MORE ASSURANCE BY DEFAULT
+    ANY EDIT != RERUN EVERYTHING
 
-An agent may autonomously execute previously authorized capabilities inside a bounded task envelope. Autonomy never expands operational authority.
+Automation is a candidate, not automatically an obligation. A claim is proven only by evidence materially exercising its contract at the relevant semantic boundary:
 
-## 2.5 Semantic proof, canonical evidence, and dependencies
-
-    Names, labels, test counts, and status strings are not proof.
-    A claim is proven only by evidence that materially exercises the contract
-    and reaches the relevant semantic boundary.
-
+    PHASE LABEL != REACHED BOUNDARY
+    FAILURE STAGE != ROOT CAUSE
+    EXPECTED ERROR CODE != TARGET CONTRACT PROVEN
     TEST NAME != PROOF
     PASS LABEL != PROOF
     TEST COUNT != CONTRACT COVERAGE
     MOCKED RESULT != EXTERNAL PROPERTY PROVEN
 
-Evidence quality depends on provenance, reproducibility, scope, integrity, and material dependencies. Evidence validity follows material dependency change, not workflow phase or elapsed ceremony: the current tree needs sufficient evidence, but ANY EDIT != RERUN EVERYTHING. Revalidate only evidence whose material dependency surface could have changed.
+Evidence depends on provenance, reproducibility, scope, integrity, and material dependencies. Use OBSERVED, PROVEN, DISPROVEN, PROVEN_FROM_STATIC_CODE, REUSED EVIDENCE, INFERRED, PROPOSED, and NOT_PROVEN when useful; at runtime distinguish REACHED, NOT_REACHED, and NOT_PROVEN. Absence is OBSERVED only in inspected scope. Invalid evidence is NOT_PROVEN. Contradictory recent LOCAL evidence is STATE_CONFLICT / NOT_PROVEN until reconciled from fresh raw evidence; do not reset, restore, clean, or checkout before attribution. Labels such as PASS, VERIFIED, VALID, or CERTIFIED are declarations, not proof. For temporal evidence: observe, timestamp, materialize, then evaluate parseability, canonical form, non-future status, staleness, and required freshness.
 
-# 3. Source precedence
+### 2.1 Dependency-surface reuse
 
-For published state: GitHub > ChatGPT memory. For current development: LOCAL repository > GitHub. For reasoning and history: Project context + durable documentation. Valid LOCAL evidence may legitimately be newer than REMOTE.
+    EVIDENCE VALIDITY FOLLOWS MATERIAL DEPENDENCIES
 
-# 4. Responsibilities and operating planes
+Reuse evidence only when its artifact surface and material dependencies are unchanged, no contradiction invalidates it, and provenance remains clear. A reviewer distinguishes its execution from reused human/Codex/CI evidence. Hashes may prove byte identity where material.
 
-## 4.1 Pedro — Human Authority
+A **CERTIFIED ARTIFACT FREEZE** preserves certified bytes. Documentation-only or sibling work does not invalidate unrelated technical evidence. A **SUB-DELIVERY** may become a **CERTIFIED SUB-DELIVERY** and remain frozen while a sibling proceeds; its evidence remains reusable while its dependency/material surface is unchanged. Multiple certified micro-deliveries can form one controlled higher-level checkpoint without individual commits. Unexpected change to a certified artifact is TECHNICAL_ARTIFACT_DRIFT and must be handled before reuse of intersecting evidence.
 
-Pedro retains final human authority for architecture/finding acceptance, implementation authorization, and exceptions. Pedro also holds default authority for commit, push, merge, release, credentials/secrets, sensitive or destructive actions, cloud mutation, spending, elevation, and consumable operations. Technical assurance never broadens explicit scope.
+### 2.2 Validation routing
 
-## 4.2 ChatGPT — Control / Decision Plane
+Use the smallest sufficient gate: focused first, dependent family next, broad regression when warranted. Do not run broad gates while a narrow prerequisite is red.
 
-ChatGPT owns the WHAT: architecture, planning, contracts, acceptance criteria, validation design, strategy, evidence interpretation, and choosing the smallest sufficient gate. It distinguishes implementation, harness, fixture, environment, and tooling failures; defines proof needs; and avoids rerunning valid evidence without a material dependency reason. It is not the independent implementation assurance layer.
+    Codex        -> cheap/focused deterministic gates
+    Pedro/LOCAL  -> heavy/canonical runtime or infrastructure validation
+    ChatGPT      -> validation design and interpretation
+    Kiro         -> independent evidence and assurance
 
-## 4.3 Codex — Implementation Plane
+**HUMAN CANONICAL VALIDATION** is valid human/LOCAL evidence at a canonical runtime/infrastructure boundary. It is not mandatory for every test and valid recent human evidence need not be repeated without material reason.
 
-Codex is the principal writer and implementer.
+## 3. Roles
 
-    One writer by default.
-    Codex owns HOW, not authorization.
-    DO NOT COMMIT
-    DO NOT PUSH
+Pedro holds final authority for acceptance, implementation, exceptions, certification, commit, push, merge, release, secrets, sensitive/destructive action, cloud mutation, spending, elevation, and consumable operations.
 
-Those prohibitions remain unless explicitly approved. Codex may modify only the authorized working tree, should run useful cheap deterministic gates, and must report remaining infrastructure-dependent validation. READY FOR REVIEW is a hard gate under section 14.
+ChatGPT defines WHAT: architecture, contracts, acceptance criteria, validation design, strategy, proof needs, and interpretation. It distinguishes implementation, fixture, harness, environment, infrastructure, and tooling failure; it is not the independent assurance layer.
 
-## 4.4 Kiro — Assurance Plane
+magic-investigator has READ_ONLY FACTUAL AUTONOMY. When material uncertainty exists it establishes facts before implementation: resolves actual repository/runtime contracts, searches relevant historical tests, consumers, and constraints where contract evolution is material, identifies the smallest evidence-backed remediation boundary, then stops before implementation. READ_ONLY means no material repository, system, or evidence mutation. Deterministic LOCAL/OFFLINE focused tests are allowed only when they do not mutate the worktree, consume authority, create canonical ATTEMPT/RESULT artifacts, execute provider/cloud operations, or cross an unauthorized boundary. Stop for required mutation, scope expansion, unexpected repository/branch/HEAD/worktree, secrets, provider/cloud action, or STATE_CONFLICT.
 
-Kiro supplies specialist evidence and independent implementation assurance; it is not mandatory ceremony.
+Codex is principal writer; one writer by default. It owns HOW, not authority; changes authorized scope only; runs useful cheap deterministic gates; reports remaining runtime validation; and does not commit/push without explicit authority.
 
-### magic-investigator
+magic-reviewer has READ_ONLY ASSURANCE AUTONOMY. It never modifies files, certifies, or grants authority; it issues only PASS, NEEDS_CHANGES, or BLOCKED. It can provide CONTRACT ASSURANCE, IMPLEMENTATION ASSURANCE, and DELIVERY / DOCUMENTATION ASSURANCE; resolves effective code/API/type contract before findings; preserves provenance; may run permitted bounded deterministic validation; supports delta closure; and does not reopen certified/frozen surfaces without material dependency reason. It separates material findings from LOW/non-blocking observations and declares open material questions.
 
-magic-investigator has READ_ONLY FACTUAL AUTONOMY within the authorized repository/task envelope. It may read/search files; inspect source, tests, docs, config, and Git read-only state; reconstruct factual repository state; and perform Contract Discovery. It stops for required mutation, scope expansion, unexpected repository/branch/HEAD/worktree, secret material, or provider/cloud action.
+Independent review is required by default for security; authentication/authorization; persistent data/migrations; financial invariants; cloud/infrastructure; cross-repository contracts; core architecture; high-impact refactors; release candidates; recovery after material failure; and significant uncertainty. It is recommended for nontrivial behavior, test architecture, dependency/configuration, and ordinary multi-file changes. It is not required by default for low-risk typo, copy, formatting, pure documentation, or mechanically obvious work unless Pedro requires it.
 
-It distinguishes OBSERVED, PROVEN_FROM_STATIC_CODE, INFERRED, PROPOSED, and NOT_PROVEN when material; irrelevant labels need not be printed.
+    PASS + NON-BLOCKING OBSERVATIONS is valid.
+    PASS != PERFECT
+    NON-BLOCKING != MUST FIX
+    NON-BLOCKING != MUST IGNORE
 
-### magic-reviewer
+magic-orchestrator is an optional ROUTER only for genuinely ambiguous Kiro routing; it neither writes nor designs architecture.
 
-magic-reviewer has READ_ONLY ASSURANCE AUTONOMY: it may traverse an authorized review scope using permitted read-only operations, but never acquires mutation, commit, push, deploy, secret, or provider/cloud authority. It reviews scope/completeness, reuses valid deterministic evidence, examines semantic/adversarial boundaries, and issues only PASS, NEEDS_CHANGES, or BLOCKED as assurance verdicts, not human decisions. Record REVIEWED / UNREVIEWED DUE TO EARLY EXIT when material.
+Where reproducibility matters record ROLE, MODEL, EFFORT, PERMISSIONS, and RUNTIME VERSION. MODEL CHANGE != AUTHORITY CHANGE; EFFORT CHANGE != AUTHORITY CHANGE. Prefer the least expensive validated profile preserving quality/risk coverage.
 
-Its read-only autonomy continues only while the task envelope remains valid. It must STOP and report for required mutation, scope expansion, unexpected repository, branch, HEAD, working tree, or review scope, secret material, provider/cloud action, or STATE_CONFLICT. For STATE_CONFLICT, reconcile fresh evidence before continuing assurance conclusions for the conflicted scope. These boundaries do not broaden authority.
+## 4. Closure and authority
 
-### magic-orchestrator
+Applicable terms include IMPLEMENTED, TESTED, PROPERTY PROVEN, ASSURED, CERTIFIABLE, CERTIFIED, SUB-DELIVERY, CERTIFIED SUB-DELIVERY, and CERTIFIED ARTIFACT FREEZE. They are not mandatory ceremony; certification closes only defined scope.
 
-magic-orchestrator is an OPTIONAL ROUTER only when the Kiro executor is genuinely ambiguous. It is outside the happy path and does not write or design architecture.
+    CONTRACT CERTIFICATION
+    != IMPLEMENTATION AUTHORIZATION
+    != IMPLEMENTATION CERTIFICATION
+    != DELIVERY CERTIFICATION
+    != COMMIT AUTHORIZATION
+    != PUSH AUTHORIZATION
+    != DEPLOY AUTHORIZATION
+    REVIEW PASS != HUMAN CERTIFICATION
+    CI GREEN != NEXT OPERATION AUTHORIZED
 
-## 4.5 Work mode
+    AUTHORITY DOES NOT INHERIT ACROSS A BOUNDARY
+    UNLESS THE EXPLICIT CONTRACT SAYS SO.
 
-Use ChatGPT Work only where specialized capability materially justifies the cost, not for routine repository inspection.
+Authorization accounts for unavoidable composite effects, for example push -> automatic CI -> automatic deployment. PUSH != DEPLOY AUTHORITY remains true.
 
-# 5. Closure, certification, and authorization states
+    HUMAN DECISION != MATERIALIZED EXECUTION AUTHORITY
 
-Use these terms when material; they are not a mandatory state machine:
+A decision may be GRANTED while execution remains forbidden until trusted technical representation exists. If needed authority has no certified representation/verifier: AUTHORITY_GAP -> STOP. Never invent flags, variables, booleans, tokens, JSON, or another authority mechanism.
 
-    IMPLEMENTED      required source/capability exists.
-    TESTED           applicable tests executed successfully.
-    PROPERTY PROVEN  required property has sufficient evidence at the correct boundary.
-    ASSURED          independent assurance evaluated applicable implementation/evidence.
-    CERTIFIABLE      defined technical closure criteria satisfied.
-    CERTIFIED        Pedro accepts the checkpoint as formally closed.
+For productive authority prefer untrusted bytes -> strict verifier -> trusted representation -> execution gate. Caller-controlled fields cannot construct trusted authority where they bypass trust. Keep independent gates distinct: WHAT IS ALLOWED? != HAS THE HUMAN DECIDED TO EXECUTE IT NOW?
 
-Operational dimensions remain independent: COMMIT AUTHORIZED, COMMITTED, PUSH AUTHORIZED, PUBLISHED, REMOTE VERIFIED, CI VERIFIED, POST-PUBLICATION ESTABLISHED, NEXT OPERATION AUTHORIZED, and RUNTIME / PROVIDER AUTHORIZED.
+Source commit/hash may be authority identity. Changed certified execution source is SOURCE_BINDING_GAP; never replace expected SHA with HEAD merely to pass. Old source-bound authority can be SUPERSEDED / DO NOT REUSE. Every consumable authority defines a CONSUMPTION POINT; verification, reading, review, tests, commit, push, and creation of trusted representation do not consume it unless contract says so.
 
-    One state does not imply another unless the explicit contract says so.
-    CERTIFIABLE != CERTIFIED
-    CERTIFIED != AUTHORIZED
-    CERTIFIED does not upgrade NOT_PROVEN to PROVEN.
+## 5. Consumable execution
 
-Certification closes only the defined acceptance scope.
+    PRE-GUARDS -> ATTEMPT / CONSUMPTION -> MATERIAL EXECUTION
+    -> RAW RESULT -> CANONICAL RESULT -> REPORTING
 
-# 6. Evidence discipline and routing
+Before consumption classify dependencies as PROVABLE_PRE_ATTEMPT, NOT_PROVABLE_WITHOUT_EXECUTION, REQUIRES_EXTERNAL_RUNTIME, or REQUIRES_EXTERNAL_ACCESS. Check every deterministically provable prerequisite whose failure wastes an attempt.
 
-Use this taxonomy when material:
+Do not collapse PRESENT, IDENTITY_VALID, STRUCTURALLY_COMPATIBLE, EXECUTION_ACCESSIBLE, and RUNTIME_LAUNCHABILITY_PROVEN. If launchability needs execution, report RUNTIME_LAUNCHABILITY_NOT_PREPROVABLE, not generic PASS.
 
-    OBSERVED
-    PROVEN_FROM_STATIC_CODE
-    REUSED EVIDENCE
-    INFERRED
-    PROPOSED
-    NOT_PROVEN
+Ensure material failures can practically yield bounded useful non-secret evidence. **DIAGNOSTIC EVIDENCE HARDENING** is an independent micro-delivery that improves future evidence only. Prefer structured metadata over arbitrary output, stack traces, environment dumps, or sensitive exception text.
 
-REUSED EVIDENCE is valid evidence produced previously or by another actor; it must not falsely claim reviewer execution. Platform/account metrics outrank estimates.
+    CANONICAL CONSUMED STATE > REPORTING HARNESS
 
-## 6.1 Scoped negative evidence and boundary provenance
+After canonical state proves execution, presentation failure is POST_EXECUTION_REPORTING_HARNESS_ERROR; it never authorizes retry, second ATTEMPT, regeneration, or repeated material execution. A failed/consumed identity is FAILED / CONSUMED / IMMUTABLE / NON_RETRYABLE where applicable. Do not delete/rewrite ATTEMPT/RESULT; a future attempt requires a new valid authority/generation. Prefer: material execution -> raw result -> canonical state -> parse -> friendly reporting.
 
-Absence is OBSERVED only within inspected scope. Evidence must originate from a source capable of observing the boundary it claims to prove:
+## 6. Failure classification, tests, and regression
 
-    LOCAL projection != canonical proof of REMOTE
-    mocked boundary != real external property
-    source CSS != rendered browser result
+    CLASSIFY FIRST
+    REMEDIATE SECOND
 
-## 6.2 Labels and canonical evidence
+Classify when material: PRODUCTION_DEFECT, TEST_DEFECT, FIXTURE_DEFECT, HARNESS_DEFECT, EXPECTATION_DRIFT, ENVIRONMENT_FAILURE, INFRASTRUCTURE_FAILURE, TOOLING_FAILURE, TOOL_GUARD_BLOCK, STATE_CONFLICT, SCOPE_CONFLICT, or AUTHORITY_GAP. Tool errors are hypotheses until root cause is evidenced.
 
-Labels such as PASS, VERIFIED, VALID, or CERTIFIED are declarations, not proof. Use real canonical runner results when valid execution exists; do not fix estimated counts as a contract where the runner discovers them dynamically.
+    TARGET CAPABILITY REACHED?
+    NO  -> fixture / harness / environment / tooling
+    YES -> compare with CURRENT contract
+           violated -> possible production defect
+           historical assertion only -> expectation drift
 
-## 6.3 Invalid, temporal, and contradictory evidence
+Historical tests can contain TEST / EXPECTATION DRIFT or STALE ASSERTION. Do not revert authorized production to satisfy stale history. Evolve exact allowlists/signatures, not broad wildcards/counts.
 
-Invalid evidence degrades to NOT_PROVEN. For temporal evidence: observe, timestamp, materialize, then evaluate parseability, canonical form, non-future status, staleness, and required freshness window.
+Fixtures satisfy certified persistent contracts unless rejection is intentional. Resolve target-call data before privilege reduction unless source is part of contract. Negative tests, when material, prove code plus semantic error/class/message, originating object, target capability reached, and origin at/after target boundary. A test proves only the boundary reached; use a valid baseline plus one changed field where practical. Test initial state is owned by that test.
 
-Contradictory recent LOCAL observations mean STATE_CONFLICT / NOT_PROVEN. Gather fresh raw evidence and reconcile first; do not reset, restore, clean, or checkout before attribution.
+Changes to shared schemas, constants, generated configuration, canonical strings, filenames, CLI arguments, trust IDs, provider rules, or command contracts require bounded consumer/test/fixture/doc search. This does not mean rerun everything.
 
-## 6.4 Evidence reuse and layer-aware revalidation
-
-Use the smallest sufficient validation scope. A passing gate remains reusable when its layer and material dependencies are unchanged. Test-only changes may need focused gates; service-only changes may reuse unchanged DB evidence; SQL changes need relevant DB evidence; privileged runtime changes need runtime validation; documentation-only changes normally need no infrastructure validation.
-
-## 6.5 Layered validation gates
-
-Prefer cheap/narrow to expensive/broad: focused test, focused chain, family suite, diff check, Git scope, then required infrastructure/runtime gate. Do not advance past a red narrower prerequisite. Classify warnings separately.
-
-## 6.6 Routing
-
-Use the smallest agent topology: ChatGPT for architecture/planning and interpretation; Pedro for authorization and heavy/canonical LOCAL validation; investigator for factual LOCAL gaps; Codex for writing and cheap gates; reviewer for independent assurance; orchestrator only for ambiguous Kiro routing.
-
-## 6.7 Independent review policy
-
-Review is required by default for security, auth/authorization, persistent data/migrations, financial invariants, cloud/infrastructure, cross-repository contracts, core architecture, high-impact refactors, release candidates, recovery after material failures, or significant uncertainty. It is recommended for nontrivial behavior, test architecture, dependency/configuration, and ordinary multi-file changes; it is not required by default for typos, copy, pure documentation, formatting, or mechanically obvious work. Pedro may require it in any case.
-
-# 7. Threat models, findings, and delta review
-
-Freeze a verifiable closure contract for material remediation:
-
-    FINDING CLOSES IF:
-    A
-    B
-    C
-
-State FROZEN FINDING RESOLVED or FROZEN FINDING NOT RESOLVED; keep NEW MATERIAL FINDING separate. Use FULL REVIEW, DELTA CLOSURE, or DELTA + RESUME. Delta review checks frozen finding, remediation diff, closure criteria, direct regressions, applicable frozen anchors, and reusable evidence. Previously closed findings remain closed unless the delta touches their boundary, contradictory evidence invalidates closure, or an independent material defect is found. Do not reopen accepted architecture without a material reason.
-
-# 8. Local infrastructure validation responsibility
-
-    Codex          → cheap deterministic gates
-    Pedro / LOCAL  → heavy/canonical runtime or infrastructure validation
-    ChatGPT        → validation design and interpretation
-    Kiro           → evidence reuse and assurance
-
-This does not require Pedro to execute every test. Valid recent human evidence should not be repeated without material reason. Infrastructure failure alone does not establish product failure; classify product, harness, fixture, environment, infrastructure, and tooling causes.
-
-# 9. Reproducible runtime procedures
-
-## 9.1 Execution-unit integrity
+## 7. Runtime, PowerShell, and cleanup
 
     LOGICAL FAIL-FAST != EXECUTION FAIL-FAST
     GUARD FAILURE = END OF AUTHORIZED HARNESS
+    PARSE BEFORE MUTATE
 
-Where safety/evidence depends on structured control flow, keep guards, actions, exit checks, cleanup, and postchecks in one real execution unit: a .ps1, one invoked script block, one process, or an existing deterministic harness. For material PowerShell, use strict mode, ErrorActionPreference Stop, and explicit LASTEXITCODE checks for applicable native commands.
+Establish helpers/functions/control flow before first mutation in sensitive harnesses; keep guards, actions, checks, cleanup, and postchecks in one execution unit. For material PowerShell use StrictMode, ErrorActionPreference Stop, and explicit applicable LASTEXITCODE checks. Normalize conceptual 0/1/N pipeline collections with @(... ) before .Count/set comparison; use braced variable interpolation where a colon immediately follows a variable; materialize complex scope operands before comparing.
 
-## 9.2 PASS integrity and repo-local tooling
+For sensitive ceremonies, non-secret SESSION CONTEXT should include repo, branch, HEAD, generation, authority/decision IDs, and artifact paths. Secrets/passphrases/private recovery material remain interactive and never persist in environment variables, scripts, arguments, logs, chat, or evidence.
 
-A PASS is valid only if the check completed, no parser/runtime/control-flow error invalidated it, and its semantics match the contract. Harness text alone is insufficient. Prefer a repo-local versioned tool over an assumed global installation where it improves reproducibility.
+    runtime validation -> preserve evidence -> resources required next?
+    NO -> project-scoped cleanup -> verify cleanup -> continue
 
-# 10. Authorized and consumable operations
+Cleanup is conditional, project-scoped, preserves primary failure, and uses try/finally where appropriate. Never globally prune unrelated resources without authority.
 
-    AUTHORITY IS TYPED AND SCOPED
-    DESIGN APPROVED != EXECUTION AUTHORIZED
-    KEY GENERATED != SIGNING AUTHORIZED
-    SIGNED != EXECUTION AUTHORIZED
-    CI GREEN != NEXT OPERATION AUTHORIZED
+For systems without a shared transaction boundary, do not claim distributed atomicity; define material pre-mutation failure, external-success/local-finalization failure, durable intermediate state, reconciliation, and applicable retry/idempotency. PATH CONTAINMENT != SAFE TEMPORARY OWNERSHIP. Helpers writing sensitive or contractual material require, where material, a validated temporary/workspace root protected against repository, protected-root, home, and user-root ambiguity.
 
-Possible types are DESIGN, CERTIFICATION, CRYPTOGRAPHIC, EXECUTION, CONSUMPTION, COMMIT, PUBLICATION, and DEPLOYMENT; not all apply to every delivery. For sensitive confirmation: DISPLAYED → HUMAN CONFIRMED → IMMUTABLY BOUND → SIGNED / EXECUTED. The executed value must materially bind to the confirmed value.
+Production private-key generation, passphrase entry, recovery material, production signing, and private-key decryption are HUMAN-ONLY SECRET OPERATIONS. Agents may design, review, and publicly verify but must not receive production secrets. When secure interactive input is viable, do not persist interactive secrets in CLI arguments, environment variables, source, .env, structured/JSON evidence, chat/prompts, shell literals, transcripts/logs, or GitHub/CI/CD. Non-secret paths and public IDs may remain session/environment variables where safe.
 
-If a durable/write-once operation materializes state but later verification fails, record separately write state, verification state, authority consumption state, and runtime/downstream state.
+## 8. Documentation, Git, and permissions
 
-    POST-WRITE FAILURE != SAFE RETRY
+Before documentation edits perform **DOCUMENTATION AUTHORITY DISCOVERY**: identify the owner of changed truth.
 
-Improve observability before repeating an insufficiently informative consumable operation. Distinguish wrapper/process success, operation observed, provider success, schema/contract success, and runtime success.
+    DEVELOPMENT_WORKFLOW.md -> shared process
+    AGENTS.md               -> repository-specific guidance
+    ARCHITECTURE.md         -> current architecture
+    DOMAIN.md               -> stable domain rules
+    ROADMAP                 -> planning/status where present
+    SECURITY.md             -> security/privilege contract where present
+    README                  -> only when materially required
 
-# 11. Fault injection and regression boundaries
+Do not update by symmetry. **DOCUMENTATION CLOSURE** normally follows technical assurance; documentation-only deltas do not invalidate unrelated technical evidence. If closure requires changing certified technical artifacts, classify IMPLEMENTATION_CONFLICT or TECHNICAL_ARTIFACT_DRIFT and STOP.
 
-    A TEST PROVES ONLY THE SEMANTIC BOUNDARY IT ACTUALLY REACHES.
+Unless explicitly authorized: DO NOT COMMIT; DO NOT PUSH. Exact scope is tracked git diff --name-only plus untracked leaf files. Review new files; use exact staging, not git add .; account for attributes/EOL/representation where bytes matter.
 
-A labelled open/write/flush/reread failure, byte mismatch, or digest mismatch must actually materialize and reach that condition; a name or exception message is not proof. For validators with multiple caller-controlled inputs, use a fully valid baseline plus one changed field for one negative case where practical.
+**GUARDED COMMIT** checks expected branch/HEAD/origin/divergence, worktree/staged scope, diff, exact staging, and artifact integrity; after commit checks parent, paths, residual state, divergence. It requires separate human authority. **GUARDED PUSH** separately checks branch, HEAD, origin, divergence, clean state; afterward verifies remote SHA, divergence, and exact-SHA CI.
 
-    TEST INITIAL STATE MUST BE OWNED BY THE TEST THAT REQUIRES IT.
+    COMMITTED -> PUSH AUTHORIZED -> PUBLISHED -> REMOTE SHA VERIFIED
+    -> CI EXACT-SHA VERIFIED -> post-publication gate -> final establishment
 
-Avoid order-dependent hidden preconditions, especially in lifecycle, auth, reservations, concurrency, and write-once flows. Materialize real governance/security fixtures where the contract needs them.
+Preserve canonical preauthorized command shape. For unexpected prompts: inspect -> constrain command -> retest -> only then permission delta. Prefer exact target read authority. Permission changes need static and relevant runtime acceptance. CONFIGURATION CORRECTNESS != VENDOR / PLATFORM CAPABILITY; proven limitation means STOP CONFIG ESCALATION -> document -> safe workaround if appropriate.
 
-A fake proves application behavior given fake output; it does not prove the external/platform property it replaces. If only mock evidence exists for a real-boundary property, it is NOT_PROVEN. Private/internal seams are acceptable only where they add no public API, unsafe production injection, or semantic change; reach the real boundary; and do not weaken security.
+## 9. Micro-deliveries, handoff, and loops
 
-# 12. Cross-system and privileged operations
+Micro-deliveries declare objective, state, changes, constraints, scope, validation, and handoff. CONTRACT DISCOVERY / READ_ONLY ends CONTRACT RESOLVED or CONTRACT AMBIGUITY REMAINS and can modify zero files. AUTHORITY_GAP and DIAGNOSTIC EVIDENCE HARDENING are valid bounded conditions. STOP + EVIDENCE + FILES MODIFIED = 0 succeeds where implementation would weaken/invent contract.
 
-For systems without a shared transaction boundary, do not claim distributed atomicity. Define material pre-mutation failure, external-success/local-finalization failure, durable intermediate state, reconciliation, retry, and idempotency behavior.
+Dependency gap: STOP -> exact gap -> no workaround -> bounded authorization -> certify dependency -> resume only if authority remains valid. Material remediation freezes closure criteria and separates FROZEN FINDING from NEW MATERIAL FINDING. Delta review checks the finding, diff, closure, regressions, anchors, and evidence.
 
-    PATH CONTAINMENT != SAFE TEMPORARY OWNERSHIP
+Codex handoffs include applicable: CHECKPOINT; FINAL GIT STATE; SCOPE RESULT; AUTHORITY STATUS; expected/actual mutation surface; validations run/not run and reason; cross-contract consumers inspected; expected historical regressions; PRODUCTION DEFECT FOUND: YES / NO; implementation completion; readiness; commit/push authority. Do not infer IMPLEMENTED, TEST ADDED, TEST EXECUTED, or PROPERTY PROVEN from one another: each claim needs its own applicable evidence. READY FOR REVIEW requires all hard gates and sufficient proof; required MISSING, FAIL, or NOT_PROVEN is NOT READY.
 
-Helpers writing sensitive or contractual material must demonstrate a fresh validated temporary root where material: canonical paths, fresh workspace, repository/protected/home/user-root exclusion, and fail-closed ambiguity.
+    Requirement -> ChatGPT WHAT -> Contract Discovery -> investigator proof
+    -> Pedro authorization -> Codex HOW -> focused validation
+    -> human canonical validation / reviewer assurance when required
+    -> CERTIFIABLE -> Pedro CERTIFIES -> Documentation Closure
+    -> delivery assurance -> Delivery Certification -> guarded commit/push
+    -> exact-SHA CI -> cleanup/final establishment
 
-HUMAN-ONLY SECRET OPERATION applies to production private-key generation, passphrase entry, recovery material, production signing, and private-key decryption. Agents may design, review, and publicly verify, but must not receive production secrets. Do not persist interactive secrets in CLI arguments, environment variables, source, .env, JSON evidence, chat, prompts, shell literals, transcripts, or GitHub/CI when secure interactive prompting is viable.
+    OBSERVE -> INVESTIGATE -> PROVE BOUNDARY -> CLASSIFY
+    -> DEFINE WHAT -> IMPLEMENT MINIMUM HOW -> VALIDATE -> ASSURE
 
-# 13. Micro-deliveries
+## 10. Published state, sessions, and lifecycle
 
-Micro-deliveries contain objective, context/state, required changes, constraints, out-of-scope scope, validations, and expected handoff.
+GitHub is the latest published/verifiable checkpoint. Prefer LOCAL -> commit -> push -> GitHub; avoid parallel LOCAL/direct-GitHub mutation. Verify exact remote branch SHA, workflow head SHA, workflow conclusion, and required job conclusions where applicable. ELIGIBLE CANDIDATE != NEXT OPERATION AUTHORIZED.
 
-## 13.1 Contract Discovery
+For external dependencies, identify installation/execution surfaces: local development, tests, CI, build, packaging/runtime as applicable. On CI red, classify product, test, dependency, pipeline, runner, external, or unknown cause first; invalidate only intersecting evidence, preserve historical failures, and add pipeline regression only when proportionate. Pull requests are optional, preferred where risk, architecture, collaboration, review history, rollback, or branch protection warrants them.
 
-CONTRACT DISCOVERY / READ_ONLY is a valid micro-delivery. It ends CONTRACT RESOLVED or CONTRACT AMBIGUITY REMAINS and may have files modified = 0.
+At session start identify project and goal; read this workflow and relevant documentation; inspect published checkpoint; compare LOCAL, REMOTE, and CONTEXT; and reuse evidence only where dependencies remain unchanged. Treat multiple repositories as one system only where contracts require it. Use least-privilege integrations only for concrete unmet needs.
 
-## 13.2 Contract Gap Protocol
+Projects remain understandable if conversations disappear: Git/GitHub preserve history/publication; repository documentation preserves architecture/decisions; Project Sources preserve stable workflow instructions; conversations are optional context. Use the simplest capable tool and repo-local versioned tooling where it improves reproducibility; avoid unnecessary toolchain churn.
 
-    STOP → identify exact gap → no workaround → no implicit architecture expansion
-    → new bounded dependency delivery / authorization → certify dependency
-    → resume original task if authorization remains valid
+NOT CURRENTLY REQUIRED != OBSOLETE. A frozen experiment may be reviewed for KEEP, MIGRATE, HISTORICAL, or SAFE TO DELETE. SAFE TO DELETE is evidence, not deletion authority; reconcile authoritative documentation and KEEP/MIGRATE items before human-authorized deletion, then verify relevant absence, references, scripts, registrations, and architecture impact.
 
-    DEPENDENCY GAP != IMPLICIT SCOPE EXPANSION
+## 11. Change management and status
 
-BLOCKED BY DEPENDENCY does not automatically revoke original task authorization.
+This workflow is stable but not immutable. Minor improvement example: 2.3 -> 2.4. Update Last reviewed when formally reconsidered. Feedback discovered after the v2.4 scope freeze targets v2.5 unless correcting or faithfully implementing a frozen v2.4 requirement.
 
-## 13.3 Micro-pass discipline
-
-For work too broad for a predictable pass, use bounded micro-passes declaring WRITABLE FILES, FROZEN FILES, OBJECTIVE, VALIDATION, and HANDOFF. Closed pass artifacts are frozen by default unless scope expansion is explicit.
-
-# 14. Standard Codex completion requirements
-
-Codex handoffs include applicable fields without forcing irrelevant fields for trivial work:
-
-    CHECKPOINT
-    WRITABLE FILES / FROZEN FILES
-    PRODUCTION CODE CHANGED / TESTS CHANGED / PRIVATE TEST SEAMS
-    IMPLEMENTED / TEST ADDED / TEST EXECUTED
-    PROPERTY PROVEN / PROPERTY NOT PROVEN
-    VALIDATION RESULTS / REMAINING LOCAL OR RUNTIME VALIDATION
-    PRODUCTION DEFECT FOUND: YES / NO
-    IMPLEMENTATION COMPLETE / INCOMPLETE
-    VALIDATION PASSED / FAILED
-    READY FOR REVIEW / NOT READY FOR REVIEW
-    GIT STATUS
-    COMMIT AUTHORIZED / NOT AUTHORIZED
-    PUSH AUTHORIZED / NOT AUTHORIZED
-
-READY FOR REVIEW only if every required hard acceptance gate is present and sufficiently proven. MISSING, FAIL, or required NOT_PROVEN means NOT READY FOR REVIEW. Codex must not infer IMPLEMENTED, TEST ADDED, TEST EXECUTED, and PROPERTY PROVEN from one another. Kiro verdicts remain independent.
-
-# 15. Git and checkpoint policy
-
-Unless explicitly approved: DO NOT COMMIT and DO NOT PUSH. A reviewer PASS does not authorize commit; a commit does not authorize push.
-
-Where exact scope is material, real scope is the union of tracked git diff --name-only and untracked leaf files from git ls-files --others --exclude-standard. Git status --short is a useful summary, not sole exact-scope evidence. Review relevant new files completely; git diff alone is insufficient.
-
-After staging, compare git diff --cached --name-only with authorized scope. Prefer exact git add paths for frozen scope; do not use git add . as a default pattern there. When bytes/digests matter, inspect applicable .gitattributes, account for filters/EOL normalization, inspect/hash necessary worktree and staged-blob forms, and prove committed representation matches contract.
-
-    DISCOVERED NECESSITY != WRITE AUTHORIZATION
-
-Stop for SCOPE EXPANSION REQUIRED when an unauthorized file/surface is needed, unless supporting files were already authorized.
-
-# 16. Documentation closure
-
-Stable important decisions belong in durable repository documentation, not only conversation. Documentation closure is delivery closure when normative. Review depends on semantic authority, not extension: typo, formatting, and explanatory wording are low risk; authoritative roadmaps, architecture/security contracts, authorization rules, deployment/current-state declarations, operational procedures, and normative decisions are material. A documentation-only delivery can be independently certifiable when the document is authoritative.
-
-# 17. Documentation roles
-
-DEVELOPMENT_WORKFLOW.md defines shared process; AGENTS.md repository-specific guidance; ARCHITECTURE.md current architecture; DOMAIN.md stable domain rules; docs/decisions material decisions; and docs/known-issues.md / runbooks durable operational knowledge.
-
-# 18. Project conversations and Project Source mirror
-
-Repository DEVELOPMENT_WORKFLOW.md is authoritative; a ChatGPT Project Source copy is a synchronized operational mirror. After an approved/published workflow update, update/push the repository source first, then replace relevant mirrors. If versions differ, the repository wins.
-
-# 19. Tool and version stability
-
-Use the simplest capable tool and reusable valid evidence. Prefer a repo-local versioned tool where it improves reproducibility. Do not add toolchain churn mid-delivery unless security, compatibility, correctness, or the delivery requires it.
-
-# 20. Local cleanup responsibility
-
-    RESOURCE LIFECYCLE IS PART OF VALIDATION LIFECYCLE.
-
-After a phase starts resources, ask whether the next phase needs them. If not, preserve evidence first, then stop project-specific services/resources, verify they stopped, and clear applicable temporary process state. Cleanup is scoped, not universal ceremony. Never globally prune or delete unrelated/persistent data without explicit authorization.
-
-# 21. GitHub responsibilities and write policy
-
-GitHub is the latest published/verifiable checkpoint. Prefer LOCAL → commit → push → GitHub; avoid parallel LOCAL/direct-GitHub code mutation. GitHub writes require explicit authorization.
-
-## 21.1 Publication and exact-SHA verification
-
-    COMMITTED → PUSH AUTHORIZED → PUBLISHED → REMOTE SHA VERIFIED
-    → CI EXACT-SHA VERIFIED → POST-PUBLICATION GATE when contract defines one
-    → FINAL ESTABLISHMENT
-
-Verify exact remote branch SHA, workflow head SHA, workflow conclusion, and required job conclusions. PUSH SUCCEEDED != CI VERIFIED. A green published state may be only an eligible candidate: ELIGIBLE CANDIDATE != NEXT OPERATION AUTHORIZED.
-
-## 21.2 Dependency integration and CI failure classification
-
-For external dependencies, identify installation/execution surfaces: local development, tests, CI, build, packaging/runtime as applicable. Do not declare complete where a needed surface cannot obtain it. On CI red, classify product, test, dependency, pipeline, runner, external, or unknown root cause first; invalidate only intersecting evidence and use bounded remediation/delta review where suitable. Preserve historical failures as historical evidence even if later green. Add deterministic pipeline regression only when proportionate.
-
-## 21.3 Pull requests
-
-Pull requests are optional; prefer them for high risk, major architecture, multi-developer, valuable review/rollback history, or branch-protection cases.
-
-# 22. New session startup protocol
-
-Identify project and goal; read workflow/relevant documentation; inspect published checkpoint; compare LOCAL, REMOTE, and context; do not assume GitHub contains uncommitted work; and reuse valid evidence where dependencies remain unchanged. A contradiction with a recent LOCAL checkpoint is STATE_CONFLICT / NOT_PROVEN: gather fresh evidence before calling it drift.
-
-# 23. Multi-repository projects
-
-Treat multiple repositories as one system only where contracts require it. Inspect relevant repositories before cross-system decisions, limit Codex scope to what implementation needs, and keep evidence scoped to the boundary it covers.
-
-# 24. Plugins and integrations
-
-Use least privilege and install integrations only for concrete unmet needs. Investigator and reviewer are read-only; orchestrator routes only; Codex writes only within authorized scope; ChatGPT has no direct production-GitHub mutation by default; Pedro remains the credentials and sensitive-authorization boundary. New credentials, permissions, external mutations, or spending require Pedro.
-
-# 25. Experimental project lifecycle and deprecation
-
-NOT CURRENTLY REQUIRED != OBSOLETE. A frozen experiment may undergo formal deprecation review when circumstances materially change.
-
-## 25.1 Deprecation review
-
-Inspect, as applicable, LOCAL Git state, unpublished work, remotes, untracked files, original purpose/functionality, dependencies, external references, registrations, credentials/shared configuration, documentation, and architecture impact. Classify KEEP, MIGRATE, HISTORICAL, or SAFE TO DELETE, ending PROJECT STILL REQUIRED or PROJECT OBSOLETE — SAFE TO DELETE.
-
-## 25.2 Human authority and documentation reconciliation
-
-PROJECT OBSOLETE — SAFE TO DELETE is evidence, not deletion authority:
-
-    SAFE TO DELETE != DELETE AUTHORIZED
-
-Reconcile KEEP/MIGRATE items and authoritative documentation/mirrors before Pedro authorizes deletion.
-
-## 25.3 Post-delete verification
-
-Verify, when material, target absence, operational references/registrations, scripts, and architecture impact. Useful results include DELETION VERIFIED, NO OPERATIONAL REFERENCES REMAIN, and CURRENT ARCHITECTURE UNAFFECTED.
-
-## 25.4 Historical note: magic-development-mcp
-
-magic-development-mcp was an experimental foundation from an earlier architecture and is not operationally required by the current Kiro-based workflow. Its deletion remains separate human-authorized action.
-
-# 26. Standard development loop
-
-    Requirement / feedback
-            ↓
-    Pedro + ChatGPT define WHAT / contract
-            ↓
-    Contract Discovery if needed
-            ↓
-    Pedro authorizes implementation
-            ↓
-    Codex implements bounded HOW + cheap gates
-            ↓
-    READY FOR REVIEW?
-            ↓
-    Pedro executes canonical LOCAL/runtime validation when required
-            ↓
-    Independent review when required
-            ↓
-    Remaining browser/runtime/provider domain when applicable
-            ↓
-    Finding? → frozen closure contract → bounded remediation
-             → DELTA CLOSURE / DELTA + RESUME
-            ↓
-    CERTIFIABLE? → Pedro decides CERTIFIED
-            ↓
-    evaluate checkpoint → explicit commit authorization → exact staging + commit
-            ↓
-    separate push authorization → publish → remote exact-SHA / CI verification
-            ↓
-    post-publication gate if defined → final checkpoint establishment
-
-magic-orchestrator remains outside the happy path.
-
-# 27. Recovery rule
-
-Projects must remain understandable if conversations disappear: Git/GitHub preserve history and publication; repository documentation preserves architecture and decisions; Project sources preserve stable workflow instructions; conversations are optional context.
-
-# 28. Final operational rule
-
-Classify each task: ChatGPT for reasoning and published-state questions; local tools for mechanical Git; Codex for authorized local modification/deep understanding; investigator for material LOCAL factual gaps; reviewer for independent assurance; Pedro/LOCAL for heavy canonical validation; orchestrator only for ambiguous Kiro routing; Automation First for repeated deterministic work; Work only where specialized capability is justified.
-
-# 29. Change management
-
-This workflow is stable but not immutable. Minor improvements increment the minor version:
-
-    2.2 → 2.3
-
-Update Last reviewed whenever formally reconsidered. Feedback discovered after the v2.3 scope freeze targets future v2.4 unless needed to correct or faithfully consolidate an already approved v2.3 rule.
-
-# 30. Current status
-
-This is the active v2.3 workflow for Pedro, ChatGPT, Codex, and Kiro. It consolidates execution-unit integrity; semantic proof; evidence provenance/reuse; typed authority; exact Git/artifact scope; contract discovery/gaps; publication/CI establishment; conditional runtime/browser validation; resource hygiene; and bounded Kiro read-only autonomy.
-
-Project-specific exceptions and operational details belong in the project repository rather than silently changing this workflow.
+This pending-certification v2.4 workflow consolidates refined PROVES/HOW/ASSURES topology; dependency-surface reuse, artifact freeze, and saturation; authority materialization/non-inheritance; consumable execution and diagnostics; failure classification/cross-contract regression; documentation authority/closure; guarded commit/push; human canonical validation; bounded autonomy/permission discipline; and PowerShell safety. Project-specific exceptions belong in the repository.
